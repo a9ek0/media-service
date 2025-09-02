@@ -79,3 +79,6 @@ logs/
 # OS-generated files
 .DS_Store
 Thumbs.db
+
+# Requirments
+requirements.txt
