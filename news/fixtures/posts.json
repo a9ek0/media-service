@@ -1,0 +1,146 @@
+[
+  {
+    "model": "news.post",
+    "pk": 1,
+    "fields": {
+      "title": "Новый электромобиль Tesla 2025",
+      "slug": "tesla-2025",
+      "category": 3,
+      "excerpt": "Краткий обзор новой модели Tesla 2025",
+      "body": "Полный текст обзора электромобиля Tesla с характеристиками, фото и впечатлениями от тест-драйва.",
+      "cover": 2,
+      "status": "published",
+      "is_featured": true,
+      "published_at": "2025-09-01T09:00:00Z",
+      "updated_at": "2025-09-01T09:00:00Z",
+      "views": 120,
+      "tags": [1,3,4]
+    }
+  },
+  {
+    "model": "news.post",
+    "pk": 2,
+    "fields": {
+      "title": "Тест-драйв нового Audi A6",
+      "slug": "audi-a6-test-drive",
+      "category": 2,
+      "excerpt": "Мы протестировали Audi A6 2025 года выпуска.",
+      "body": "Детальный текст о том, как проходит тест-драйв, впечатления от динамики, комфорта и технологий автомобиля.",
+      "cover": 3,
+      "status": "draft",
+      "is_featured": false,
+      "published_at": null,
+      "updated_at": "2025-09-01T12:00:00Z",
+      "views": 0,
+      "tags": [2]
+    }
+  },
+  {
+    "model": "news.post",
+    "pk": 3,
+    "fields": {
+      "title": "Инновационные системы безопасности в авто",
+      "slug": "car-safety-2025",
+      "category": 4,
+      "excerpt": "Обзор новых технологий безопасности",
+      "body": "Текст про инновации в безопасности автомобилей, автопилот, предупреждения столкновений.",
+      "cover": 1,
+      "status": "published",
+      "is_featured": false,
+      "published_at": "2025-09-02T10:00:00Z",
+      "updated_at": "2025-09-02T10:00:00Z",
+      "views": 75,
+      "tags": [4,5]
+    }
+  },
+  {
+    "model": "news.post",
+    "pk": 4,
+    "fields": {
+      "title": "Сравнение гибридных моделей 2025",
+      "slug": "hybrid-models-comparison",
+      "category": 5,
+      "excerpt": "Сравниваем топовые гибридные автомобили этого года",
+      "body": "Подробное сравнение расхода топлива, характеристик и особенностей самых популярных гибридных моделей на рынке.",
+      "cover": 4,
+      "status": "published",
+      "is_featured": true,
+      "published_at": "2025-09-05T08:30:00Z",
+      "updated_at": "2025-09-05T08:30:00Z",
+      "views": 98,
+      "tags": [1,6,10]
+    }
+  },
+  {
+    "model": "news.post",
+    "pk": 5,
+    "fields": {
+      "title": "Ferrari представила новый спорткар",
+      "slug": "new-ferrari-unveiled",
+      "category": 1,
+      "excerpt": "Итальянский производитель анонсировал новый суперкар",
+      "body": "Подробности о новом Ferrari: двигатель V8, разгон до 100 км/ч за 2.8 секунды, углеродный кузов и новейшие технологии.",
+      "cover": 5,
+      "status": "published",
+      "is_featured": true,
+      "published_at": "2025-09-10T14:00:00Z",
+      "updated_at": "2025-09-10T15:30:00Z",
+      "views": 215,
+      "tags": [7,9]
+    }
+  },
+  {
+    "model": "news.post",
+    "pk": 6,
+    "fields": {
+      "title": "Итоги Гран-при Монако 2025",
+      "slug": "monaco-grand-prix-2025",
+      "category": 7,
+      "excerpt": "Обзор самой престижной гонки сезона Формулы 1",
+      "body": "Полный обзор гонки, интервью с победителями, ключевые моменты и результаты гоночного уикенда в Монако.",
+      "cover": 6,
+      "status": "published",
+      "is_featured": false,
+      "published_at": "2025-05-28T18:00:00Z",
+      "updated_at": "2025-05-28T20:15:00Z",
+      "views": 187,
+      "tags": [9]
+    }
+  },
+  {
+    "model": "news.post",
+    "pk": 7,
+    "fields": {
+      "title": "Новый концепт электрического BMW",
+      "slug": "bmw-electric-concept",
+      "category": 3,
+      "excerpt": "BMW представили футуристический концепт электромобиля",
+      "body": "Обзор инновационного концепта BMW с запасом хода 800 км и революционным дизайном интерьера.",
+      "cover": 7,
+      "status": "published",
+      "is_featured": false,
+      "published_at": "2025-09-15T11:20:00Z",
+      "updated_at": "2025-09-15T11:20:00Z",
+      "views": 133,
+      "tags": [3,4,11]
+    }
+  },
+  {
+    "model": "news.post",
+    "pk": 8,
+    "fields": {
+      "title": "Как правильно подготовить автомобиль к зиме",
+      "slug": "winter-car-preparation",
+      "category": 8,
+      "excerpt": "Советы по подготовке вашего авто к зимнему сезону",
+      "body": "Пошаговая инструкция по замене резины, проверке аккумулятора, антифриза и других жидкостей перед наступлением холодов.",
+      "cover": 8,
+      "status": "published",
+      "is_featured": false,
+      "published_at": "2025-10-05T09:00:00Z",
+      "updated_at": "2025-10-05T09:00:00Z",
+      "views": 245,
+      "tags": [5]
+    }
+  }
+]
