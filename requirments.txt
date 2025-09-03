@@ -5,3 +5,4 @@ django-ckeditor
 psycopg2-binary   # only if you will use Postgres
 django-redis
 python-dotenv
+django-filter

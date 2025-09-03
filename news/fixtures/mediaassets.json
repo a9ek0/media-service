@@ -3,7 +3,7 @@
     "model": "news.mediaasset",
     "pk": 1,
     "fields": {
-      "file": "media/cars/car1.jpg",
+      "file": "car1.jpg",
       "alt": "Красный спортивный автомобиль",
       "uploaded_at": "2025-09-02T12:00:00Z",
       "original_name": "car1.jpg"
@@ -13,7 +13,7 @@
     "model": "news.mediaasset",
     "pk": 2,
     "fields": {
-      "file": "media/cars/car2.jpg",
+      "file": "car2.jpg",
       "alt": "Электромобиль Tesla",
       "uploaded_at": "2025-09-02T12:05:00Z",
       "original_name": "car2.jpg"
@@ -23,7 +23,7 @@
     "model": "news.mediaasset",
     "pk": 3,
     "fields": {
-      "file": "media/cars/car3.jpg",
+      "file": "car3.jpg",
       "alt": "Audi A6 черный",
       "uploaded_at": "2025-09-02T12:10:00Z",
       "original_name": "car3.jpg"
@@ -33,7 +33,7 @@
     "model": "news.mediaasset",
     "pk": 4,
     "fields": {
-      "file": "media/cars/hybrid_comparison.jpg",
+      "file": "hybrid_comparison.jpg",
       "alt": "Сравнение гибридных моделей",
       "uploaded_at": "2025-09-05T08:00:00Z",
       "original_name": "hybrid_lineup.jpg"
@@ -43,7 +43,7 @@
     "model": "news.mediaasset",
     "pk": 5,
     "fields": {
-      "file": "media/cars/ferrari_new.jpg",
+      "file": "ferrari_new.jpg",
       "alt": "Новый Ferrari суперкар",
       "uploaded_at": "2025-09-10T13:30:00Z",
       "original_name": "ferrari2025.jpg"
@@ -53,7 +53,7 @@
     "model": "news.mediaasset",
     "pk": 6,
     "fields": {
-      "file": "media/racing/monaco_gp.jpg",
+      "file": "monaco_gp.jpg",
       "alt": "Трасса Монако Формула 1",
       "uploaded_at": "2025-05-27T19:20:00Z",
       "original_name": "monaco_circuit.jpg"
@@ -63,7 +63,7 @@
     "model": "news.mediaasset",
     "pk": 7,
     "fields": {
-      "file": "media/cars/bmw_concept.jpg",
+      "file": "bmw_concept.jpg",
       "alt": "BMW электрический концепт",
       "uploaded_at": "2025-09-15T10:45:00Z",
       "original_name": "bmw_future_ev.jpg"
@@ -73,7 +73,7 @@
     "model": "news.mediaasset",
     "pk": 8,
     "fields": {
-      "file": "media/service/winter_prep.jpg",
+      "file": "winter_prep.jpg",
       "alt": "Подготовка автомобиля к зиме",
       "uploaded_at": "2025-10-04T16:30:00Z",
       "original_name": "winter_maintenance.jpg"

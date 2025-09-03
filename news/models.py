@@ -28,7 +28,7 @@ class Category(models.Model):
         return self.name
 
 class MediaAsset(models.Model):
-    file = models.FileField(upload_to="media/", verbose_name="Файл")
+    file = models.FileField(upload_to="", verbose_name="Файл")
     alt = models.CharField(max_length=100, blank=True, verbose_name="Описание (alt)")
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки")
     original_name = models.CharField(max_length=100, blank=True, verbose_name="Оригинальное имя файла")
