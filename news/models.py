@@ -80,7 +80,7 @@ class Post(models.Model):
         verbose_name="Статус"
     )
     is_featured = models.BooleanField(default=False, verbose_name="Закрепить на главной")
-    created_at = models.DateTimeField(default=timezone.now, verbose_name="Дата создания")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     published_at = models.DateTimeField(null=True, blank=True, verbose_name="Дата публикации")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
     views = models.PositiveIntegerField(default=0, verbose_name="Просмотры")
