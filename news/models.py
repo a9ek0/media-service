@@ -1,8 +1,9 @@
 from django.db import models
+from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название")
-    slug = models.SlugField(max_length=100, verbose_name="Slug")
+    slug = models.SlugField(max_length=100, unique=True, verbose_name="Slug")
     parent = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,
@@ -28,7 +29,7 @@ class Category(models.Model):
         return self.name
 
 class MediaAsset(models.Model):
-    file = models.FileField(upload_to="", verbose_name="Файл")
+    file = models.FileField(upload_to="uploads/%Y/%m/%d/", verbose_name="Файл")
     alt = models.CharField(max_length=100, blank=True, verbose_name="Описание (alt)")
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки")
     original_name = models.CharField(max_length=100, blank=True, verbose_name="Оригинальное имя файла")
@@ -84,6 +85,7 @@ class Post(models.Model):
         verbose_name="Статус"
     )
     is_featured = models.BooleanField(default=False, verbose_name="Закрепить на главной")
+    created_at = models.DateTimeField(default=timezone.now, verbose_name="Дата создания")
     published_at = models.DateTimeField(null=True, blank=True, verbose_name="Дата публикации")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
     views = models.PositiveIntegerField(default=0, verbose_name="Просмотры")
@@ -97,6 +99,13 @@ class Post(models.Model):
             models.Index(fields=['slug']),
             models.Index(fields=['published_at']),
         ]
+
+    def save(self, *args, **kwargs):
+        if self.status == 'published' and not self.published_at:
+            self.published_at = timezone.now()
+        elif self.status == 'draft':
+            self.published_at = None
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
