@@ -21,6 +21,7 @@ class MediaAssetSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    views = serializers.IntegerField(read_only=True)
     category = CategorySerializer(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(),
@@ -57,6 +58,7 @@ class PostSerializer(serializers.ModelSerializer):
             "cover_id",
             "status",
             "is_featured",
+            "created_at",
             "published_at",
             "updated_at",
             "views",
