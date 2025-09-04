@@ -65,7 +65,7 @@ class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     autocomplete_fields = ("category", "tags")
     list_select_related = ("category", "cover")
-    list_prefetch_related = ("tags",)  # Django doesn't provide this attribute, used for clarity; we'll prefetch in get_queryset
+    list_prefetch_related = ("tags",)
     date_hierarchy = "published_at"
     ordering = ("-published_at", "-updated_at")
     readonly_fields = ("views", "updated_at")
@@ -81,7 +81,6 @@ class PostAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        # select_related for FK, prefetch_related for M2M — reduce N+1
         return qs.select_related("category", "cover").prefetch_related("tags")
 
     def cover_preview(self, obj):
