@@ -3,7 +3,7 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название")
-    slug = models.SlugField(max_length=100, unique=True, verbose_name="Slug")
+    slug = models.SlugField(max_length=100, unique=True, db_index=True, verbose_name="Slug")
     parent = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,
@@ -18,12 +18,7 @@ class Category(models.Model):
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
         ordering = ['name']
-        constraints = [
-            models.UniqueConstraint(
-                fields=['slug', 'parent'],
-                name='unique_slug_per_parent'
-            )
-        ]
+        indexes = [models.Index(fields=['slug'])]
 
     def __str__(self):
         return self.name
