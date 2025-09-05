@@ -1,10 +1,15 @@
 from django.db.models import F
+from django.core.paginator import Paginator
 from django_filters import rest_framework as django_filters
 from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
+
 from rest_framework import viewsets, permissions, filters
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
 
 from .models import Category, Tag, Post, MediaAsset
 from .serializers import CategorySerializer, TagSerializer, PostSerializer, MediaAssetSerializer
@@ -66,3 +71,16 @@ class PostViewSet(BaseViewSet):
         Post.objects.filter(pk=post.pk).update(views=F('views') + 1)
         post.refresh_from_db(fields=['views'])
         return Response({"views": post.views})
+
+def index(request):
+    posts_qs = Post.objects.filter(status='published').order_by('-published_at')
+    paginator = Paginator(posts_qs, 9)  # 9 per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    featured = posts_qs.filter(is_featured=True).first()
+    return render(request, 'index.html', {'posts': page_obj, 'featured': featured, 'now': timezone.now()})
+
+def post_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug, status='published')
+    Post.objects.filter(pk=post.pk).update(views=F('views') + 1)
+    return render(request, 'post_detail.html', {'post': post, 'now': timezone.now()})

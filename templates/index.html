@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Главная — Media Service{% endblock %}
+{% block content %}
+  {% comment %} Featured post (если есть) {% endcomment %}
+  {% if featured %}
+  <section class="hero">
+    <article class="hero-card">
+      <a href="{% url 'news:post_detail' slug=featured.slug %}">
+        {% if featured.cover %}
+          <img src="{{ featured.cover.file.url }}" alt="{{ featured.cover.alt }}" class="hero-cover" />
+        {% endif %}
+        <div class="hero-body">
+          <h1 class="hero-title">{{ featured.title }}</h1>
+          <p class="meta">{{ featured.published_at|date:"Y-m-d H:i" }} • {{ featured.category.name }}</p>
+          <p class="excerpt">{{ featured.excerpt }}</p>
+        </div>
+      </a>
+    </article>
+  </section>
+  {% endif %}
+
+  <section class="posts-grid" aria-label="Posts list">
+    {% for post in posts %}
+      <article class="post-card">
+        <a href="{% url 'news:post_detail' slug=post.slug %}">
+          {% if post.cover %}
+            <img src="{{ post.cover.file.url }}" alt="{{ post.cover.alt }}" class="post-cover"/>
+          {% endif %}
+          <div class="card-body">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
+            <p class="post-meta">{{ post.published_at|date:"Y-m-d" }} • {{ post.category.name }}</p>
+          </div>
+        </a>
+      </article>
+    {% empty %}
+      <p>Записей нет.</p>
+    {% endfor %}
+  </section>
+
+  <nav class="pagination" aria-label="Pagination">
+    {% if posts.has_previous %}
+      <a href="?page={{ posts.previous_page_number }}" class="page-link">← Предыдущая</a>
+    {% endif %}
+    <span class="page-info">Страница {{ posts.number }} из {{ posts.paginator.num_pages }}</span>
+    {% if posts.has_next %}
+      <a href="?page={{ posts.next_page_number }}" class="page-link">Следующая →</a>
+    {% endif %}
+  </nav>
+{% endblock %}

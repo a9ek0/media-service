@@ -1,13 +1,9 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import CategoryViewSet, TagViewSet, PostViewSet, MediaAssetViewSet
+from django.urls import path
+from . import views
 
-router = DefaultRouter()
-router.register(r'categories', CategoryViewSet, basename='category')
-router.register(r'tags', TagViewSet, basename='tag')
-router.register(r'posts', PostViewSet, basename='post')
-router.register(r'media', MediaAssetViewSet, basename='media')
+app_name = 'news'
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', views.index, name='index'),
+    path('posts/<slug:slug>/', views.post_detail, name='post_detail'),
 ]

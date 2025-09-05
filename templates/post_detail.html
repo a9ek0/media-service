@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — Media Service{% endblock %}
+{% block content %}
+<article class="post-detail">
+  <a class="back-link" href="{% url 'news:index' %}">← Назад</a>
+  <h1 class="post-title">{{ post.title }}</h1>
+  <p class="meta">{{ post.published_at|date:"Y-m-d H:i" }} • {{ post.category.name }} • {{ post.views }} просмотров</p>
+
+  {% if post.cover %}
+    <img src="{{ post.cover.file.url }}" alt="{{ post.cover.alt }}" class="post-cover-full">
+  {% endif %}
+
+  <div class="post-body">
+    {{ post.body|safe }}
+  </div>
+
+  <div class="post-tags">
+    {% for tag in post.tags.all %}
+      <a class="tag" href="#">{{ tag.name }}</a>
+    {% endfor %}
+  </div>
+</article>
+{% endblock %}
