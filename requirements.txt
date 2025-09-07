@@ -2,7 +2,7 @@ Django>=4.2
 djangorestframework
 Pillow
 django-ckeditor
-psycopg2-binary   # only if you will use Postgres
+psycopg2-binary
 django-redis
 python-dotenv
 django-filter
@@ -10,3 +10,6 @@ django-cors-headers
 django-editorjs
 django-editorjs2
 django_editorjs_fields
+model_bakery
+pytest
+pytest-django
