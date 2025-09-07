@@ -1,0 +1,6 @@
+<blockquote class="quote quote-{{ alignment }}">
+    <div class="quote-text">{{ text|safe }}</div>
+    {% if caption %}
+    <cite class="quote-caption">{{ caption }}</cite>
+    {% endif %}
+</blockquote>

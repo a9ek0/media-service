@@ -43,6 +43,8 @@ class PostSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True
     )
+    body_json = serializers.JSONField(required=False, allow_null=True)
+    body = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = Post
@@ -64,4 +66,18 @@ class PostSerializer(serializers.ModelSerializer):
             "views",
             "tags",
             "tag_ids",
+            "body_json",
         ]
+
+    def validate_body_json(self, value):
+        if value is None:
+            return value
+        if not isinstance(value, list):
+            raise serializers.ValidationError("body_json must be a list of blocks")
+        allowed_types = {"paragraph", "heading", "image", "quote", "embed", "list"}
+        for block in value:
+            if not isinstance(block, dict) or "type" not in block or "data" not in block:
+                raise serializers.ValidationError("Invalid block structure")
+            if block["type"] not in allowed_types:
+                raise serializers.ValidationError(f"Unsupported block type: {block['type']}")
+        return value

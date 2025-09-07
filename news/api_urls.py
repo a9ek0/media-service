@@ -7,6 +7,6 @@ router.register(r'tags', TagViewSet, basename='tag')
 router.register(r'posts', PostViewSet, basename='post')
 router.register(r'media', MediaAssetViewSet, basename='media')
 
-urlpatterns = [
+urlpatterns = [ 
     path('', include(router.urls)),
 ]

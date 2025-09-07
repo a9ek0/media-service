@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
 
-    'rest_framework',
-    'rest_framework.authtoken',
+    #'django_editorjs',
+    'django_editorjs2',
+    'django_filters',
     'ckeditor',
     'ckeditor_uploader',
-    'django_filters',
     'corsheaders',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     'news'
 ]
@@ -57,21 +59,21 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
+# CORS configuration
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
 
-# Desable in prod
+# !
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_HEADERS = [
@@ -86,13 +88,30 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
+#  CSRF configuration
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+
+# !
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_HTTPONLY = False
+
+# Session configuration
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
+
 ROOT_URLCONF = 'mediaService.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,6 +124,36 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mediaService.wsgi.application'
+
+# EditorJS configuration
+DJANGO_EDITORJS2_CONFIG = {
+    "max_attachment_size_bytes": 5 * 1024 * 1024,  # 5 MB
+    "attachment_file_extensions": ["zip", "doc", "docx", "pdf"],
+    "tools": {
+        "header": {"class": "editorjs_header.EditorJsHeader", "inlineToolbar": True},
+        "list": {"class": "editorjs_list.EditorJsList", "inlineToolbar": True},
+        "quote": {"class": "editorjs_quote.EditorJsQuote", "inlineToolbar": True},
+        "image": {
+            "class": "editorjs_image.ImageTool",
+            "config": {
+                "endpoints": {
+                    "byFile": "/editorjs/upload_file/",
+                    "byUrl": "/editorjs/fetch_url/"
+                }
+            }
+        },
+    },
+    "extra_attributes": {
+        "paragraph": {},
+        "header": {},
+        "quote": {},
+        "list": {},
+        "checklist": {},
+        "code": {},
+        "image": {},
+    }
+}
+
 
 # REST Framework
 REST_FRAMEWORK = {
@@ -187,7 +236,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
-STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT = BASE_DIR / "staticfiles"  
+STATICFILES_DIRS = [BASE_DIR / "static"]  
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 

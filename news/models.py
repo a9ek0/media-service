@@ -1,5 +1,7 @@
 from django.db import models
+from django_editorjs2.fields import EditorJSField
 from django.utils import timezone
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название")
@@ -64,7 +66,8 @@ class Post(models.Model):
         verbose_name="Категория"
     )
     excerpt = models.TextField(blank=True, verbose_name="Краткое описание")
-    body = models.TextField(verbose_name="Текст")
+    body = models.TextField(blank=True, verbose_name="Текст")
+    body_json = EditorJSField(blank=True, default=dict, verbose_name='Текст (JSON)')
     cover = models.ForeignKey(
         MediaAsset,
         on_delete=models.SET_NULL,

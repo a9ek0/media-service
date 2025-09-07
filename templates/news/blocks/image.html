@@ -1,0 +1,6 @@
+<div class="image-block{% if stretched %} image-stretched{% endif %}{% if withBorder %} image-with-border{% endif %}{% if withBackground %} image-with-background{% endif %}">
+    <img src="{{ url }}" alt="{{ alt }}" {% if css_class %}class="{{ css_class }}"{% endif %}>
+    {% if caption %}
+    <div class="image-caption">{{ caption }}</div>
+    {% endif %}
+</div>

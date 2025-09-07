@@ -1,11 +1,9 @@
-# admin.py
-from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.http import urlencode
 
 from .models import Category, Post, MediaAsset, Tag
-
+from django.contrib import admin
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -50,7 +48,7 @@ class MediaAssetAdmin(admin.ModelAdmin):
     file_link.short_description = "Файл"
 
     def file_preview(self, obj):
-        if not obj.file:
+        if not obj.file: 
             return "-"
         url = obj.file.url
         return format_html('<img src="{}" style="max-height:80px; max-width:160px; object-fit:cover;"/>', url)
@@ -71,7 +69,7 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ("views", "updated_at")
     fieldsets = (
         ("Main", {"fields": ("title", "slug", "category", "cover", "tags")}),
-        ("Content", {"fields": ("excerpt", "body")}),
+        ("Content", {"fields": ("excerpt", "body_json")}),
         ("Publication", {"fields": ("status", "is_featured", "published_at")}),
         ("Meta", {"fields": ("views", "updated_at")}),
     )
@@ -92,7 +90,6 @@ class PostAdmin(admin.ModelAdmin):
     @admin.action(description="Mark selected posts as published")
     def make_published(self, request, queryset):
         updated = queryset.update(status="published")
-        # set published_at for those without it
         queryset.filter(published_at__isnull=True).update(published_at=__import__("django.utils.timezone").utils.timezone.now())
         self.message_user(request, f"{updated} записей помечено как опубликованные")
 
@@ -101,7 +98,6 @@ class PostAdmin(admin.ModelAdmin):
         updated = queryset.update(status="draft")
         self.message_user(request, f"{updated} записей переведено в черновики")
 
-    # small helper to add direct link to filtered list by tag (optional improvement)
     def tag_link(self, obj):
         if not obj.tags.exists():
             return "-"

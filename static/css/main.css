@@ -18,10 +18,46 @@ body{font-family:Inter, Arial, sans-serif;color:var(--text);line-height:1.55;mar
 
 /* Hero */
 .hero{margin-bottom:1.25rem}
-.hero-card{display:flex;gap:1rem;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.hero-cover{width:40%;object-fit:cover;height:260px}
-.hero-body{padding:1rem}
-.hero-title{margin:0 0 .5rem;font-size:1.6rem}
+.hero-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 260px; /* минимальная высота для фона */
+}
+.hero-card a {
+  text-decoration: none; /* убрать подчеркивание */
+  color: inherit; /* наследовать цвет от родителя */
+}
+.hero-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.hero-body {
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.6); /* темный полупрозрачный фон для контраста */
+  color: #fff; /* белый текст для читаемости */
+  padding: 1rem;
+  flex: 1;
+}
+.hero-title {
+  color: #fff; /* белый заголовок */
+  margin: 0 0 .5rem;
+  font-size: 1.6rem;
+}
+
+.meta, .excerpt {
+  color: #ddd; /* светло-серый для мета и excerpt */
+}
 
 /* grid */
 .posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
