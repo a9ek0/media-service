@@ -85,29 +85,40 @@ class PostViewSet(BaseViewSet):
         data['rendered_body'] = render_body_from_json(instance.body_json)
         return Response(data)
 
+
 def index(request):
+    # Получаем выбранную категорию из GET параметров
     selected_category = request.GET.get('category')
+
+    # Получаем все категории для фильтров
     categories = Category.objects.all()
+
+    # Фильтруем посты
     posts = Post.objects.filter(status='published').select_related('category')
-    
+
     if selected_category:
         category = get_object_or_404(Category, slug=selected_category)
         posts = posts.filter(category=category)
-    
+
     posts = posts.order_by('-published_at')
-    
+
+    # Получаем рекомендуемый пост (исключаем из основного списка)
     featured = posts.filter(is_featured=True).first()
     if featured:
         posts = posts.exclude(id=featured.id)
-    
+
+    # Добавляем пагинацию
+    paginator = Paginator(posts, 9)  # 10 постов на страницу
+    page_number = request.GET.get('page')
+    posts_page = paginator.get_page(page_number)
+
     context = {
         'featured': featured,
-        'posts': posts,
+        'posts': posts_page,
         'categories': categories,
         'selected_category': selected_category,
     }
     return render(request, 'index.html', context)
-
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug, status='published')
     Post.objects.filter(pk=post.pk).update(views=F('views') + 1)
