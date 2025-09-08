@@ -1,72 +1,45 @@
-{% extends "base.html" %}
-{% block title %}Главная — Media Service{% endblock %}
-{% block content %}
-  {% if featured %}
-  <section class="hero">
-    <article class="hero-card">
-      <a href="{% url 'news:post_detail' slug=featured.slug %}">
-        {% if featured.cover %}
-          <img src="{{ featured.cover.file.url }}" alt="{{ featured.cover.alt }}" class="hero-cover" />
-        {% endif %}
-        <div class="hero-body">
-          <h1 class="hero-title">{{ featured.title }}</h1>
-          <p class="meta">{{ featured.published_at|date:"Y-m-d H:i" }} • {{ featured.category.name }}</p>
-          <p class="excerpt">{{ featured.excerpt }}</p>
-        </div>
-      </a>
-    </article>
-  </section>
-  {% endif %}
-
-  <section class="filters">
-    <a href="{% url 'news:index' %}" class="filter {% if not selected_category %}active{% endif %}">
-      Все
-    </a>
-    {% for category in categories %}
-      <a href="{% url 'news:index' %}?category={{ category.slug }}" 
-         class="filter {% if category.slug == selected_category %}active{% endif %}">
-        {{ category.name }}
-      </a>
-    {% endfor %}
-  </section>
-
-  <section class="posts-grid" aria-label="Posts list">
-    {% for post in posts %}
-      <article class="post-card">
-        <a href="{% url 'news:post_detail' slug=post.slug %}">
-          {% if post.cover %}
-            <img src="{{ post.cover.file.url }}" alt="{{ post.cover.alt }}" class="post-cover" />
-          {% endif %}
-          <div class="post-body">
-            <h2 class="post-title">{{ post.title }}</h2>
-            <p class="meta">{{ post.published_at|date:"Y-m-d H:i" }} • {{ post.category.name }}</p>
-            <p class="excerpt">{{ post.excerpt }}</p>
-          </div>
-        </a>
-      </article>
-    {% empty %}
-      <div class="empty-state">
-        <p>Публикаций не найдено</p>
-        <a href="{% url 'news:index' %}">Показать все</a>
+<!-- news/templates/spa.html -->
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Media Service SPA</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="#" class="logo" id="home-link">MEDIA SERVICE</a>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#" class="nav-link" data-page="index">Главная</a>
+          <a href="#" class="nav-link">О проекте</a>
+        </nav>
+        <button class="menu-toggle" id="menuToggle" aria-expanded="false">☰</button>
       </div>
-    {% endfor %}
-  </section>
+    </header>
 
-  {% if posts.has_other_pages %}
-  <nav class="pagination" aria-label="Pagination">
-    {% if posts.has_previous %}
-      <a href="?page={{ posts.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
-         class="page-link">← Предыдущая</a>
-    {% endif %}
-    
-    <span class="page-info">
-      Страница {{ posts.number }} из {{ posts.paginator.num_pages }}
-    </span>
-    
-    {% if posts.has_next %}
-      <a href="?page={{ posts.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
-         class="page-link">Следующая →</a>
-    {% endif %}
-  </nav>
-  {% endif %}
-{% endblock %}
+    <main class="site-main container" id="app">
+      <!-- Контент будет загружен через JavaScript -->
+      <div id="loading">Загрузка...</div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© <span id="current-year"></span> Media Service</div>
+    </footer>
+
+    <script>
+      // CSRF token для AJAX запросов
+      function getCSRFToken() {
+        const cookieValue = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('csrftoken='))
+          ?.split('=')[1];
+        return cookieValue || '';
+      }
+    </script>
+
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

@@ -55,3 +55,9 @@ def authenticated_client(client, user):
 @pytest.fixture
 def api_client():
     return APIClient()
+
+@pytest.fixture
+def authenticated_api_client(user):
+    client = APIClient()
+    client.force_authenticate(user=user)
+    return client

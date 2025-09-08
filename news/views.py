@@ -1,19 +1,14 @@
-import json
-import os
-
 from django.db.models import F
-from django.conf import settings
-from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
 from django_filters import rest_framework as django_filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
+from django.shortcuts import render
 
 from rest_framework import viewsets, permissions, filters
-from rest_framework.decorators import action, api_view, parser_classes
+from rest_framework.decorators import action, api_view, parser_classes, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Category, Tag, Post, MediaAsset
@@ -85,87 +80,56 @@ class PostViewSet(BaseViewSet):
         data['rendered_body'] = render_body_from_json(instance.body_json)
         return Response(data)
 
-
 def index(request):
-    # Получаем выбранную категорию из GET параметров
-    selected_category = request.GET.get('category')
-
-    # Получаем все категории для фильтров
-    categories = Category.objects.all()
-
-    # Фильтруем посты
-    posts = Post.objects.filter(status='published').select_related('category')
-
-    if selected_category:
-        category = get_object_or_404(Category, slug=selected_category)
-        posts = posts.filter(category=category)
-
-    posts = posts.order_by('-published_at')
-
-    # Получаем рекомендуемый пост (исключаем из основного списка)
-    featured = posts.filter(is_featured=True).first()
-    if featured:
-        posts = posts.exclude(id=featured.id)
-
-    # Добавляем пагинацию
-    paginator = Paginator(posts, 9)  # 10 постов на страницу
-    page_number = request.GET.get('page')
-    posts_page = paginator.get_page(page_number)
-
-    context = {
-        'featured': featured,
-        'posts': posts_page,
-        'categories': categories,
-        'selected_category': selected_category,
-    }
-    return render(request, 'index.html', context)
+    return render(request, 'index.html')
 def post_detail(request, slug):
-    post = get_object_or_404(Post, slug=slug, status='published')
-    Post.objects.filter(pk=post.pk).update(views=F('views') + 1)
-    rendered_body = render_body_from_json(post.body_json)
-    return render(request, 'post_detail.html', {'post': post, 'rendered_body': rendered_body, 'now': timezone.now()})
+    return render(request, 'index.html')
 
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
-@requires_csrf_token
+@permission_classes([IsAuthenticated])
+@csrf_exempt
 def upload_image(request):
-    if request.method == 'POST':
-        file = request.FILES.get('image')
+    file = request.FILES.get('image')
 
-        if file:
-            if not file.content_type.startswith('image/'):
-                return JsonResponse({
-                    'success': 0,
-                    'error': 'Файл должен быть изображением'
-                })
+    if not file:
+        return JsonResponse({'success': 0, 'error': 'No image provided'})
 
-            media = MediaAsset.objects.create(
-                file=file,
-                alt='Uploaded image',
-                original_name=file.name
-            )
+    if not file.content_type.startswith('image/'):
+        return JsonResponse({
+            'success': 0,
+            'error': 'File must be an image'
+        })
 
-            return JsonResponse({
-                'success': 1,
-                'file': {
-                    'url': media.file.url,
-                    'id': media.id
-                }
+    media = MediaAsset.objects.create(
+        file=file,
+        alt='Uploaded image',
+        original_name=file.name
+    )
+
+    return JsonResponse({
+        'success': 1,
+        'file': {
+            'url': media.file.url,
+            'id': media.id
+        }
+    })
+
+
+@api_view(['GET'])
+def image_list(request):
+    media_assets = MediaAsset.objects.all().order_by('-uploaded_at')
+    images = []
+
+    for asset in media_assets:
+        if asset.file and hasattr(asset.file, 'url'):
+            images.append({
+                'id': asset.id,
+                'url': asset.file.url,
+                'name': asset.original_name or 'Untitled',
+                'alt': asset.alt,
+                'uploaded_at': asset.uploaded_at.isoformat()
             })
 
-    return JsonResponse({'success': 0, 'error': 'Ошибка загрузки'})
-
-def image_list(request):
-    uploads_path = os.path.join(settings.MEDIA_ROOT, 'uploads')  
-    images = []
-    if os.path.exists(uploads_path):
-        for root, dirs, files in os.walk(uploads_path):  
-            for file in files:
-                if file.endswith(('.jpg', '.png', '.gif', '.jpeg')):
-                    relative_path = os.path.relpath(os.path.join(root, file), settings.MEDIA_ROOT)
-                    images.append({
-                        'url': f"{settings.MEDIA_URL}{relative_path}",
-                        'name': file
-                    })
     return JsonResponse(images, safe=False)
