@@ -13,3 +13,4 @@ django_editorjs_fields
 model_bakery
 pytest
 pytest-django
+drf-spectacular

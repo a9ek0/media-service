@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    "drf_spectacular",
 
     'news'
 ]
@@ -168,13 +169,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
 #    'DEFAULT_PERMISSION_CLASSES': [
 #       'rest_framework.permissions.IsAuthenticated',
 #    ],
 }
-
-# Media
-
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
