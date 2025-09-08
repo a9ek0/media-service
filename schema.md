@@ -18,9 +18,11 @@
 | category_id| integer   | Ссылка на категорию (Category.id)             |
 | excerpt    | text      | Краткая выжимка (аннотация)                  |
 | body       | text      | Основной текст поста                           |
+| body_json  | json      | Структурированный контент EditorJS                           |
 | cover_id   | integer   | Ссылка на изображение (MediaAsset.id)        |
 | status     | string    | Статус публикации (черновик/опубликован)    |
 | is_featured| boolean   | Выделенный пост                               |
+| created_at | datetime| Дата создания                               |
 | published_at | datetime| Дата публикации                               |
 | updated_at | datetime  | Дата последнего изменения                     |
 | views      | integer   | Количество просмотров                          |
@@ -44,6 +46,8 @@
 | id    | integer | Уникальный идентификатор      |
 | name  | string  | Название тега                 |
 | slug  | string  | Короткий URL тега             |
+
+---
 
 ### Post_Tags (связующая таблица M2M)
 | Поле    | Тип     | Описание                         |
