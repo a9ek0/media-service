@@ -18,32 +18,37 @@
   </section>
   {% endif %}
 
+  <section class="filters">
+    <a href="{% url 'news:index' %}" class="filter {% if not selected_category %}active{% endif %}">
+      Все
+    </a>
+    {% for category in categories %}
+      <a href="{% url 'news:index' %}?category={{ category.slug }}" 
+         class="filter {% if category.slug == selected_category %}active{% endif %}">
+        {{ category.name }}
+      </a>
+    {% endfor %}
+  </section>
+
   <section class="posts-grid" aria-label="Posts list">
     {% for post in posts %}
       <article class="post-card">
         <a href="{% url 'news:post_detail' slug=post.slug %}">
           {% if post.cover %}
-            <img src="{{ post.cover.file.url }}" alt="{{ post.cover.alt }}" class="post-cover"/>
+            <img src="{{ post.cover.file.url }}" alt="{{ post.cover.alt }}" class="post-cover" />
           {% endif %}
-          <div class="card-body">
+          <div class="post-body">
             <h2 class="post-title">{{ post.title }}</h2>
-            <p class="post-excerpt">{{ post.excerpt }}</p>
-            <p class="post-meta">{{ post.published_at|date:"Y-m-d" }} • {{ post.category.name }}</p>
+            <p class="meta">{{ post.published_at|date:"Y-m-d H:i" }} • {{ post.category.name }}</p>
+            <p class="excerpt">{{ post.excerpt }}</p>
           </div>
         </a>
       </article>
     {% empty %}
-      <p>Записей нет.</p>
+      <div class="empty-state">
+        <p>Публикаций не найдено</p>
+        <a href="{% url 'news:index' %}">Показать все</a>
+      </div>
     {% endfor %}
   </section>
-
-  <nav class="pagination" aria-label="Pagination">
-    {% if posts.has_previous %}
-      <a href="?page={{ posts.previous_page_number }}" class="page-link">← Предыдущая</a>
-    {% endif %}
-    <span class="page-info">Страница {{ posts.number }} из {{ posts.paginator.num_pages }}</span>
-    {% if posts.has_next %}
-      <a href="?page={{ posts.next_page_number }}" class="page-link">Следующая →</a>
-    {% endif %}
-  </nav>
 {% endblock %}

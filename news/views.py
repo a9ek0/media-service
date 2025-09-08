@@ -86,12 +86,27 @@ class PostViewSet(BaseViewSet):
         return Response(data)
 
 def index(request):
-    posts_qs = Post.objects.filter(status='published').order_by('-published_at')
-    paginator = Paginator(posts_qs, 9)  # 9 per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    featured = posts_qs.filter(is_featured=True).first()
-    return render(request, 'index.html', {'posts': page_obj, 'featured': featured, 'now': timezone.now()})
+    selected_category = request.GET.get('category')
+    categories = Category.objects.all()
+    posts = Post.objects.filter(status='published').select_related('category')
+    
+    if selected_category:
+        category = get_object_or_404(Category, slug=selected_category)
+        posts = posts.filter(category=category)
+    
+    posts = posts.order_by('-published_at')
+    
+    featured = posts.filter(is_featured=True).first()
+    if featured:
+        posts = posts.exclude(id=featured.id)
+    
+    context = {
+        'featured': featured,
+        'posts': posts,
+        'categories': categories,
+        'selected_category': selected_category,
+    }
+    return render(request, 'index.html', context)
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug, status='published')
