@@ -3,7 +3,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django_filters import rest_framework as django_filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import JsonResponse
-from django.shortcuts import render
 
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import action, api_view, parser_classes, permission_classes
@@ -66,7 +65,7 @@ class PostViewSet(BaseViewSet):
     ordering_fields = ["published_at", "updated_at", "views", "created_at"]
     ordering = ["-published_at"]
 
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["post"], permission_classes=[])
     def hit(self, request, slug=None):
         post = self.get_object()
         Post.objects.filter(pk=post.pk).update(views=F('views') + 1)
@@ -79,12 +78,6 @@ class PostViewSet(BaseViewSet):
         data = serializer.data
         data['rendered_body'] = render_body_from_json(instance.body_json)
         return Response(data)
-
-def index(request):
-    return render(request, 'index.html')
-def post_detail(request, slug):
-    return render(request, 'index.html')
-
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])

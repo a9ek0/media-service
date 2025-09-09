@@ -5,7 +5,7 @@ from django.urls import path, include
 
 from rest_framework.authtoken.views import obtain_auth_token
 
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from drf_spectacular.views import SpectacularSwaggerView
 
 from news.views import upload_image
 

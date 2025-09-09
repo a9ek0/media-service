@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from news.models import Category, Tag, Post, MediaAsset
+from news.models import Category, Post, MediaAsset
 
 
 @pytest.mark.django_db
