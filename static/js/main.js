@@ -93,9 +93,7 @@ class MediaService {
 
             if (!this.featuredPost || this.currentCategory !== 'all') {
                 const featuredData = await this.fetchFeaturedPost();
-                this.featuredPost = featuredData.results && featuredData.results.length > 0
-                    ? featuredData.results[0]
-                    : null;
+                this.featuredPost = featuredData.results?.[0] || null;
             }
 
             this.postsData = await this.fetchPosts(this.currentCategory, this.currentPostsPage);
@@ -104,17 +102,13 @@ class MediaService {
             const totalPosts = this.postsData.count || 0;
             this.totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
-            console.log('Featured post:', this.featuredPost ? 'exists' : 'not found');
-            console.log('Regular posts loaded:', posts.length, 'Total pages:', this.totalPages, 'Total posts:', totalPosts);
-            console.log('Categories loaded:', categories.length);
-
             const html = `
                 ${this.featuredPost ? this.renderFeaturedPost(this.featuredPost) : ''}
                 ${this.renderCategoryFilters(categories, this.currentCategory)}
                 <section class="posts-grid">
-                    ${posts.length > 0 ? 
-                      posts.map(post => this.renderPostCard(post)).join('') : 
-                      '<div class="no-posts">Публикаций не найдено</div>'
+                    ${posts.length > 0 
+                        ? posts.map(post => this.renderPostCard(post)).join('') 
+                        : '<div class="no-posts">Публикаций не найдено</div>'
                     }
                 </section>
                 ${this.renderPagination()}
@@ -126,14 +120,11 @@ class MediaService {
             this.addCategoryFilterListeners();
             this.addPaginationListeners();
 
-            console.log('Index page rendered successfully');
-
         } catch (error) {
             console.error('Error rendering index:', error);
-            throw error;
+            this.showError('Ошибка загрузки страницы');
         }
     }
-
     async fetchFeaturedPost() {
         console.log('Fetching featured post from API');
         let url = `${API_BASE}/posts/?status=published&is_featured=true&page=1`;
@@ -150,18 +141,12 @@ class MediaService {
     }
 
     async fetchPosts(category = 'all', page = 1) {
-        console.log('Fetching regular posts from API, category:', category, 'page:', page);
-
-        let url = `${API_BASE}/posts/?status=published&is_featured=false&page=${page}`;
-
+        let url = `${API_BASE}/posts/?status=published&page=${page}`;
         if (category !== 'all') {
             url += `&category__slug=${category}`;
         }
-
         const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         return response.json();
     }
 
