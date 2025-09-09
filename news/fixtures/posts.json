@@ -10,13 +10,68 @@
       "body": "Полный текст обзора электромобиля Tesla с характеристиками, фото и впечатлениями от тест-драйва.",
       "cover": 2,
       "status": "published",
-      "is_featured": true,
+      "is_featured": false,
       "created_at": "2025-09-01T09:00:00Z",
       "published_at": "2025-09-01T09:00:00Z",
       "updated_at": "2025-09-01T09:00:00Z",
       "views": 120,
       "tags": [1,3,4],
-      "body_json": "{\"time\":1725609600000,\"blocks\":[{\"type\":\"paragraph\",\"data\":{\"text\":\"Tesla представила новый электромобиль 2025 года с улучшенными характеристиками.\"}},{\"type\":\"Image\",\"data\":{\"file\":{\"media_id\":2},\"caption\":\"Новый электромобиль Tesla\",\"withBorder\":false,\"stretched\":true,\"withBackground\":false}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Модель оснащена батареей на 100 кВт·ч и разгоном до 100 км/ч за 5.3 секунды.\"}},{\"type\":\"Header\",\"data\":{\"text\":\"Технические характеристики\",\"level\":2}},{\"type\":\"List\",\"data\":{\"style\":\"unordered\",\"items\":[\"Запас хода: 600 км\",\"Мощность: 450 л.с.\",\"Цена: от 50 000 $\"]}},{\"type\":\"Quote\",\"data\":{\"text\":\"Это лучший электромобиль на рынке.\",\"caption\":\"Эксперт по авто\",\"alignment\":\"left\"}}],\"version\":\"2.18.0\"}"
+      "body_json": {
+        "time": 1725609600000,
+        "blocks": [
+          {
+            "id": "g6hKtQXc9p",
+            "type": "paragraph",
+            "data": {
+              "text": "Tesla представила новый электромобиль 2025 года с улучшенными характеристиками."
+            }
+          },
+          {
+            "id": "UgkAZBTs_7",
+            "type": "image",
+            "data": {
+              "file": {"media_id": 2},
+              "caption": "Новый электромобиль Tesla",
+              "withBorder": false,
+              "stretched": true,
+              "withBackground": false
+            }
+          },
+          {
+            "id": "lXulrXlfq6",
+            "type": "paragraph",
+            "data": {
+              "text": "Модель оснащена батареей на 100 кВт·ч и разгоном до 100 км/ч за 5.3 секунды."
+            }
+          },
+          {
+            "id": "oFBLnmU_ju",
+            "type": "header",
+            "data": {
+              "text": "Технические характеристики",
+              "level": 2
+            }
+          },
+          {
+            "id": "SVB00Q26p7",
+            "type": "list",
+            "data": {
+              "style": "unordered",
+              "items": ["Запас хода: 600 км", "Мощность: 450 л.с.", "Цена: от 50 000 $"]
+            }
+          },
+          {
+            "id": "Zzfy2OG5kq",
+            "type": "quote",
+            "data": {
+              "text": "Это лучший электромобиль на рынке.",
+              "caption": "Эксперт по авто",
+              "alignment": "left"
+            }
+          }
+        ],
+        "version": "2.18.0"
+      }
     }
   },
   {
@@ -36,7 +91,52 @@
       "updated_at": "2025-09-01T12:00:00Z",
       "views": 0,
       "tags": [2],
-      "body_json": "{\"time\":1725620400000,\"blocks\":[{\"type\":\"paragraph\",\"data\":{\"text\":\"Audi A6 2025 — это седан премиум-класса с новым дизайном и технологиями.\"}},{\"type\":\"Image\",\"data\":{\"file\":{\"media_id\":3},\"caption\":\"Audi A6 на тест-драйве\",\"withBorder\":false,\"stretched\":false,\"withBackground\":false}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Во время тест-драйва мы отметили отличную управляемость и комфорт салона.\"}},{\"type\":\"Header\",\"data\":{\"text\":\"Впечатления от вождения\",\"level\":3}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Двигатель V6 работает плавно, а система безопасности на высоте.\"}}],\"version\":\"2.18.0\"}"
+      "body_json": {
+        "time": 1725620400000,
+        "blocks": [
+          {
+            "id": "0PEGrCNC9K",
+            "type": "paragraph",
+            "data": {
+              "text": "Audi A6 2025 — это седан премиум-класса с новым дизайном и технологиями."
+            }
+          },
+          {
+            "id": "CbRF5DNjqp",
+            "type": "image",
+            "data": {
+              "file": {"media_id": 3},
+              "caption": "Audi A6 на тест-драйве",
+              "withBorder": false,
+              "stretched": false,
+              "withBackground": false
+            }
+          },
+          {
+            "id": "jH-XDbVIM1",
+            "type": "paragraph",
+            "data": {
+              "text": "Во время тест-драйва мы отметили отличную управляемость и комфорт салона."
+            }
+          },
+          {
+            "id": "pHzG8ZvtJq",
+            "type": "header",
+            "data": {
+              "text": "Впечатления от вождения",
+              "level": 3
+            }
+          },
+          {
+            "id": "m3nK9Lp2qR",
+            "type": "paragraph",
+            "data": {
+              "text": "Двигатель V6 работает плавно, а система безопасности на высоте."
+            }
+          }
+        ],
+        "version": "2.18.0"
+      }
     }
   },
   {
@@ -56,7 +156,45 @@
       "updated_at": "2025-09-02T10:00:00Z",
       "views": 75,
       "tags": [4,5],
-      "body_json": "{\"time\":1725699600000,\"blocks\":[{\"type\":\"paragraph\",\"data\":{\"text\":\"Современные автомобили оснащены множеством систем безопасности.\"}},{\"type\":\"Image\",\"data\":{\"file\":{\"media_id\":1},\"caption\":\"Пример автомобиля с системами безопасности\",\"withBorder\":false,\"stretched\":false,\"withBackground\":false}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Автопилот и датчики помогают предотвратить аварии.\"}},{\"type\":\"List\",\"data\":{\"style\":\"ordered\",\"items\":[\"Адаптивный круиз-контроль\",\"Предупреждение о слепых зонах\",\"Автоматическое торможение\"]}}],\"version\":\"2.18.0\"}"
+      "body_json": {
+        "time": 1725699600000,
+        "blocks": [
+          {
+            "id": "r8tY5Nm4wE",
+            "type": "paragraph",
+            "data": {
+              "text": "Современные автомобили оснащены множеством систем безопасности."
+            }
+          },
+          {
+            "id": "q9xC6Vb3zA",
+            "type": "image",
+            "data": {
+              "file": {"media_id": 1},
+              "caption": "Пример автомобиля с системами безопасности",
+              "withBorder": false,
+              "stretched": false,
+              "withBackground": false
+            }
+          },
+          {
+            "id": "t2nS7Fg1hK",
+            "type": "paragraph",
+            "data": {
+              "text": "Автопилот и датчики помогают предотвратить аварии."
+            }
+          },
+          {
+            "id": "u5bN8Jp6mL",
+            "type": "list",
+            "data": {
+              "style": "ordered",
+              "items": ["Адаптивный круиз-контроль", "Предупреждение о слепых зонах", "Автоматическое торможение"]
+            }
+          }
+        ],
+        "version": "2.18.0"
+      }
     }
   },
   {
@@ -70,13 +208,67 @@
       "body": "Подробное сравнение расхода топлива, характеристик и особенностей самых популярных гибридных моделей на рынке.",
       "cover": 4,
       "status": "published",
-      "is_featured": true,
+      "is_featured": false,
       "created_at": "2025-09-01T09:00:00Z",
       "published_at": "2025-09-05T08:30:00Z",
       "updated_at": "2025-09-05T08:30:00Z",
       "views": 98,
       "tags": [1,6,10],
-      "body_json": "{\"time\":1725957000000,\"blocks\":[{\"type\":\"Header\",\"data\":{\"text\":\"Введение в гибридные автомобили\",\"level\":2}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Гибридные модели сочетают бензиновый двигатель и электромотор.\"}},{\"type\":\"Image\",\"data\":{\"file\":{\"media_id\":4},\"caption\":\"Топовые гибриды 2025\",\"withBorder\":false,\"stretched\":true,\"withBackground\":false}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Это позволяет снизить расход топлива и выбросы CO2.\"}},{\"type\":\"Header\",\"data\":{\"text\":\"Сравнение моделей\",\"level\":3}},{\"type\":\"List\",\"data\":{\"style\":\"unordered\",\"items\":[\"Toyota Prius: 4.5 л/100 км\",\"Honda Insight: 4.2 л/100 км\",\"Ford Escape Hybrid: 6.0 л/100 км\"]}}],\"version\":\"2.18.0\"}"
+      "body_json": {
+        "time": 1725957000000,
+        "blocks": [
+          {
+            "id": "v3cM9Kw2pQ",
+            "type": "header",
+            "data": {
+              "text": "Введение в гибридные автомобили",
+              "level": 2
+            }
+          },
+          {
+            "id": "w7fL1Rx5tY",
+            "type": "paragraph",
+            "data": {
+              "text": "Гибридные модели сочетают бензиновый двигатель и электромотор."
+            }
+          },
+          {
+            "id": "x4hK3Sz8uI",
+            "type": "image",
+            "data": {
+              "file": {"media_id": 4},
+              "caption": "Топовые гибриды 2025",
+              "withBorder": false,
+              "stretched": true,
+              "withBackground": false
+            }
+          },
+          {
+            "id": "y1jN6Tv9vO",
+            "type": "paragraph",
+            "data": {
+              "text": "Это позволяет снизить расход топлива и выбросы CO2."
+            }
+          },
+          {
+            "id": "z8mP4Uw7xR",
+            "type": "header",
+            "data": {
+              "text": "Сравнение моделей",
+              "level": 3
+            }
+          },
+          {
+            "id": "a5oQ2Xy1zS",
+            "type": "list",
+            "data": {
+              "style": "unordered",
+              "items": ["Toyota Prius: 4.5 л/100 км", "Honda Insight: 4.2 л/100 км", "Ford Escape Hybrid: 6.0 л/100 км"]
+            }
+          }
+        ],
+        "version": "2.18.0"
+      }
     }
   },
   {
@@ -96,7 +288,46 @@
       "updated_at": "2025-09-10T15:30:00Z",
       "views": 215,
       "tags": [7,9],
-      "body_json": "{\"time\":1726489800000,\"blocks\":[{\"type\":\"paragraph\",\"data\":{\"text\":\"Ferrari анонсировала новый суперкар с двигателем V8.\"}},{\"type\":\"Image\",\"data\":{\"file\":{\"media_id\":5},\"caption\":\"Ferrari 2025\",\"withBorder\":false,\"stretched\":true,\"withBackground\":false}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Разгон до 100 км/ч за 2.8 секунды и максимальная скорость 350 км/ч.\"}},{\"type\":\"Quote\",\"data\":{\"text\":\"Это шедевр итальянского дизайна.\",\"caption\":\"Журналист\",\"alignment\":\"left\"}}],\"version\":\"2.18.0\"}"
+      "body_json": {
+        "time": 1726489800000,
+        "blocks": [
+          {
+            "id": "b2pR9Za4bT",
+            "type": "paragraph",
+            "data": {
+              "text": "Ferrari анонсировала новый суперкар с двигателем V8."
+            }
+          },
+          {
+            "id": "c6qS7Yb3cU",
+            "type": "image",
+            "data": {
+              "file": {"media_id": 5},
+              "caption": "Ferrari 2025",
+              "withBorder": false,
+              "stretched": true,
+              "withBackground": false
+            }
+          },
+          {
+            "id": "d3rT5Xc2dV",
+            "type": "paragraph",
+            "data": {
+              "text": "Разгон до 100 км/ч за 2.8 секунды и максимальная скорость 350 км/ч."
+            }
+          },
+          {
+            "id": "e7sU3Wd1eW",
+            "type": "quote",
+            "data": {
+              "text": "Это шедевр итальянского дизайна.",
+              "caption": "Журналист",
+              "alignment": "left"
+            }
+          }
+        ],
+        "version": "2.18.0"
+      }
     }
   },
   {
@@ -116,7 +347,53 @@
       "updated_at": "2025-05-28T20:15:00Z",
       "views": 187,
       "tags": [9],
-      "body_json": "{\"time\":1716922800000,\"blocks\":[{\"type\":\"paragraph\",\"data\":{\"text\":\"Гран-при Монако 2025 стал одним из самых захватывающих в сезоне.\"}},{\"type\":\"Image\",\"data\":{\"file\":{\"media_id\":6},\"caption\":\"Трасса в Монако\",\"withBorder\":false,\"stretched\":false,\"withBackground\":false}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Победителем стал Макс Ферстаппен, опередивший соперников на 5 секунд.\"}},{\"type\":\"Header\",\"data\":{\"text\":\"Ключевые моменты\",\"level\":2}},{\"type\":\"List\",\"data\":{\"style\":\"ordered\",\"items\":[\"Квалификация: Поул Ферстаппена\",\"Гонка: Без аварий\",\"Подиум: Ферстаппен, Хэмилтон, Леклер\"]}}],\"version\":\"2.18.0\"}"
+      "body_json": {
+        "time": 1716922800000,
+        "blocks": [
+          {
+            "id": "f4tV1Ve0fX",
+            "type": "paragraph",
+            "data": {
+              "text": "Гран-при Монако 2025 стал одним из самых захватывающих в сезоне."
+            }
+          },
+          {
+            "id": "g8uW9Uf9gY",
+            "type": "image",
+            "data": {
+              "file": {"media_id": 6},
+              "caption": "Трасса в Монако",
+              "withBorder": false,
+              "stretched": false,
+              "withBackground": false
+            }
+          },
+          {
+            "id": "h5vX7Te8hZ",
+            "type": "paragraph",
+            "data": {
+              "text": "Победителем стал Макс Ферстаппен, опередивший соперников на 5 секунд."
+            }
+          },
+          {
+            "id": "i2wY5Sd7iA",
+            "type": "header",
+            "data": {
+              "text": "Ключевые моменты",
+              "level": 2
+            }
+          },
+          {
+            "id": "j9xZ3Rc6jB",
+            "type": "list",
+            "data": {
+              "style": "ordered",
+              "items": ["Квалификация: Поул Ферстаппена", "Гонка: Без аварий", "Подиум: Ферстаппен, Хэмилтон, Леклер"]
+            }
+          }
+        ],
+        "version": "2.18.0"
+      }
     }
   },
   {
@@ -136,7 +413,53 @@
       "updated_at": "2025-09-15T11:20:00Z",
       "views": 133,
       "tags": [3,4,11],
-      "body_json": "{\"time\":1726918800000,\"blocks\":[{\"type\":\"paragraph\",\"data\":{\"text\":\"BMW представила концепт электромобиля с запасом хода 800 км.\"}},{\"type\":\"Image\",\"data\":{\"file\":{\"media_id\":7},\"caption\":\"BMW iVision\",\"withBorder\":false,\"stretched\":true,\"withBackground\":false}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Дизайн интерьера включает голографические дисплеи и автономное вождение.\"}},{\"type\":\"Header\",\"data\":{\"text\":\"Технологии\",\"level\":3}},{\"type\":\"List\",\"data\":{\"style\":\"unordered\",\"items\":[\"Батарея: 120 кВт·ч\",\"Мощность: 500 л.с.\",\"Автопилот: Уровень 5\"]}}],\"version\":\"2.18.0\"}"
+      "body_json": {
+        "time": 1726918800000,
+        "blocks": [
+          {
+            "id": "k6yA1Qb5kC",
+            "type": "paragraph",
+            "data": {
+              "text": "BMW представила концепт электромобиля с запасом хода 800 км."
+            }
+          },
+          {
+            "id": "l3zB9Pa4lD",
+            "type": "image",
+            "data": {
+              "file": {"media_id": 7},
+              "caption": "BMW iVision",
+              "withBorder": false,
+              "stretched": true,
+              "withBackground": false
+            }
+          },
+          {
+            "id": "m7aC7Ob3mE",
+            "type": "paragraph",
+            "data": {
+              "text": "Дизайн интерьера включает голографические дисплеи и автономное вождение."
+            }
+          },
+          {
+            "id": "n4bD5Nc2nF",
+            "type": "header",
+            "data": {
+              "text": "Технологии",
+              "level": 3
+            }
+          },
+          {
+            "id": "o1cE3Md1oG",
+            "type": "list",
+            "data": {
+              "style": "unordered",
+              "items": ["Батарея: 120 кВт·ч", "Мощность: 500 л.с.", "Автопилот: Уровень 5"]
+            }
+          }
+        ],
+        "version": "2.18.0"
+      }
     }
   },
   {
@@ -156,7 +479,62 @@
       "updated_at": "2025-10-05T09:00:00Z",
       "views": 245,
       "tags": [5],
-      "body_json": "{\"time\":1728122400000,\"blocks\":[{\"type\":\"Header\",\"data\":{\"text\":\"Подготовка автомобиля к зиме\",\"level\":2}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Зима требует особого ухода за автомобилем.\"}},{\"type\":\"Image\",\"data\":{\"file\":{\"media_id\":8},\"caption\":\"Зимняя подготовка авто\",\"withBorder\":false,\"stretched\":false,\"withBackground\":false}},{\"type\":\"paragraph\",\"data\":{\"text\":\"Начните с замены шин на зимние и проверки аккумулятора.\"}},{\"type\":\"List\",\"data\":{\"style\":\"ordered\",\"items\":[\"Замена шин\",\"Проверка аккумулятора\",\"Замена антифриза\",\"Очистка стекол\"]}},{\"type\":\"Quote\",\"data\":{\"text\":\"Правильная подготовка спасет от поломок.\",\"caption\":\"Автомеханик\",\"alignment\":\"left\"}}],\"version\":\"2.18.0\"}"
+      "body_json": {
+        "time": 1728122400000,
+        "blocks": [
+          {
+            "id": "p8dF1Le0pH",
+            "type": "header",
+            "data": {
+              "text": "Подготовка автомобиля к зиме",
+              "level": 2
+            }
+          },
+          {
+            "id": "q5eG9Kf9qI",
+            "type": "paragraph",
+            "data": {
+              "text": "Зима требует особого ухода за автомобилем."
+            }
+          },
+          {
+            "id": "r2fH7Jg8rJ",
+            "type": "image",
+            "data": {
+              "file": {"media_id": 8},
+              "caption": "Зимняя подготовка авто",
+              "withBorder": false,
+              "stretched": false,
+              "withBackground": false
+            }
+          },
+          {
+            "id": "s9gI5Ih7sK",
+            "type": "paragraph",
+            "data": {
+              "text": "Начните с замены шин на зимние и проверки аккумулятора."
+            }
+          },
+          {
+            "id": "t6hJ3Hj6tL",
+            "type": "list",
+            "data": {
+              "style": "ordered",
+              "items": ["Замена шин", "Проверка аккумулятора", "Замена антифриза", "Очистка стекол"]
+            }
+          },
+          {
+            "id": "u3iK1Gk5uM",
+            "type": "quote",
+            "data": {
+              "text": "Правильная подготовка спасет от поломок.",
+              "caption": "Автомеханик",
+              "alignment": "left"
+            }
+          }
+        ],
+        "version": "2.18.0"
+      }
     }
   }
 ]
