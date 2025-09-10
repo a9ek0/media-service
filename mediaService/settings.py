@@ -44,11 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
 
-    #'django_editorjs',
     'django_editorjs2',
-    'django_filters',
-    'ckeditor',
-    'ckeditor_uploader',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -239,8 +235,6 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 STATIC_ROOT = BASE_DIR / "staticfiles"  
 STATICFILES_DIRS = [BASE_DIR / "static"]  
-
-CKEDITOR_UPLOAD_PATH = "uploads/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

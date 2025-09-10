@@ -87,7 +87,12 @@ class Post(models.Model):
     published_at = models.DateTimeField(null=True, blank=True, verbose_name="Дата публикации")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
     views = models.PositiveIntegerField(default=0, verbose_name="Просмотры")
-    tags = models.ManyToManyField(Tag, blank=True, related_name="posts", verbose_name="Теги")
+    tags = models.ManyToManyField(
+        Tag,
+        blank=True,
+        related_name="posts",
+        verbose_name="Теги"
+    )
 
     class Meta:
         verbose_name = "Пост"
@@ -96,6 +101,9 @@ class Post(models.Model):
         indexes = [
             models.Index(fields=['slug']),
             models.Index(fields=['published_at']),
+            models.Index(fields=['status']),
+            models.Index(fields=['category', 'status']),
+            models.Index(fields=['is_featured', 'status']),
         ]
 
     def save(self, *args, **kwargs):
