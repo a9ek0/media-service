@@ -1,3 +1,6 @@
+import hashlib
+
+from django.core.cache import cache
 from django.db.models import F
 from django.views.decorators.csrf import csrf_exempt
 from django_filters import rest_framework as django_filters
@@ -68,8 +71,15 @@ class PostViewSet(BaseViewSet):
     @action(detail=True, methods=["post"], permission_classes=[])
     def hit(self, request, slug=None):
         post = self.get_object()
-        Post.objects.filter(pk=post.pk).update(views=F('views') + 1)
-        post.refresh_from_db(fields=['views'])
+
+        user_ip = request.META.get('REMOTE_ADDR', '')
+        cache_key = f"post_view_{post.pk}_{hashlib.md5(user_ip.encode()).hexdigest()}"
+
+        if not cache.get(cache_key):
+            Post.objects.filter(pk=post.pk).update(views=F('views') + 1)
+            post.refresh_from_db(fields=['views'])
+            cache.set(cache_key, True, 86400)
+
         return Response({"views": post.views})
 
     def retrieve(self, request, *args, **kwargs):

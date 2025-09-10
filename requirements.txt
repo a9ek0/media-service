@@ -4,7 +4,9 @@ psycopg2-binary
 python-dotenv
 django-filter
 django-cors-headers
+django-editorjs
 django-editorjs2
+django_editorjs_fields
 model_bakery
 pytest
 pytest-django
