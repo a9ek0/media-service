@@ -68,16 +68,3 @@ class PostSerializer(serializers.ModelSerializer):
             "tag_ids",
             "body_json",
         ]
-
-    def validate_body_json(self, value):
-        if value is None:
-            return value
-        if not isinstance(value, list):
-            raise serializers.ValidationError("body_json must be a list of blocks")
-        allowed_types = {"paragraph", "heading", "image", "quote", "embed", "list"}
-        for block in value:
-            if not isinstance(block, dict) or "type" not in block or "data" not in block:
-                raise serializers.ValidationError("Invalid block structure")
-            if block["type"] not in allowed_types:
-                raise serializers.ValidationError(f"Unsupported block type: {block['type']}")
-        return value

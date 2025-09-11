@@ -34,20 +34,6 @@ class TestPostSerializer:
         assert post.title == 'New Post'
         assert post.tags.count() == 1
 
-    def test_invalid_body_json(self):
-        """Тест невалидного body_json"""
-        data = {
-            'title': 'New Post',
-            'slug': 'new-post',
-            'status': 'draft',
-            'body_json': "invalid json"
-        }
-
-        serializer = PostSerializer(data=data)
-        assert not serializer.is_valid()
-        assert 'body_json' in serializer.errors
-
-
 @pytest.mark.django_db
 class TestCategorySerializer:
     def test_category_serializer(self, category):

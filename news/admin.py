@@ -1,6 +1,4 @@
 from django.utils.html import format_html
-from django.urls import reverse
-from django.utils.http import urlencode
 
 from .models import Category, Post, MediaAsset, Tag
 from django.contrib import admin
@@ -97,15 +95,3 @@ class PostAdmin(admin.ModelAdmin):
     def make_draft(self, request, queryset):
         updated = queryset.update(status="draft")
         self.message_user(request, f"{updated} записей переведено в черновики")
-
-    def tag_link(self, obj):
-        if not obj.tags.exists():
-            return "-"
-        tag = obj.tags.first()
-        url = (
-            reverse("admin:news_post_changelist")
-            + "?"
-            + urlencode({"tags__id__exact": str(tag.id)})
-        )
-        return format_html('<a href="{}">View posts with {}</a>', url, tag.name)
-    tag_link.short_description = "Posts by tag"
