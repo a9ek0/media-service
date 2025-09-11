@@ -3,7 +3,6 @@ import pytest
 from news.serializers import PostSerializer, CategorySerializer, TagSerializer
 
 
-@pytest.mark.django_db
 class TestPostSerializer:
     def test_post_serializer(self, post):
         """Тест сериализации поста"""
@@ -34,7 +33,6 @@ class TestPostSerializer:
         assert post.title == 'New Post'
         assert post.tags.count() == 1
 
-@pytest.mark.django_db
 class TestCategorySerializer:
     def test_category_serializer(self, category):
         """Тест сериализации категории"""
@@ -45,7 +43,6 @@ class TestCategorySerializer:
         assert data['slug'] == category.slug
 
 
-@pytest.mark.django_db
 class TestTagSerializer:
     def test_tag_serializer(self, tag):
         """Тест сериализации тега"""

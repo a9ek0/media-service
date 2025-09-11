@@ -5,7 +5,6 @@ from rest_framework import status
 from news.models import Post, Category, MediaAsset
 
 
-@pytest.mark.django_db
 class TestPostViewSet:
     def test_list_posts(self, api_client):
         """Тест получения списка постов через API"""
@@ -43,7 +42,6 @@ class TestPostViewSet:
         assert post.views == initial_views + 1
 
 
-@pytest.mark.django_db
 class TestUploadImageView:
     def test_upload_image_authenticated(self, authenticated_api_client):
         """Тест загрузки изображения через API"""
@@ -63,7 +61,6 @@ class TestUploadImageView:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-@pytest.mark.django_db
 class TestMediaAssetViewSet:
     def test_list_media_assets(self, api_client):
         """Тест получения списка медиа-файлов"""

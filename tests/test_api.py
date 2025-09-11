@@ -3,7 +3,6 @@ from rest_framework import status
 from model_bakery import baker
 
 
-@pytest.mark.django_db
 class TestCategoryAPI:
     def test_category_list(self, client):
         """Тест получения списка категорий"""
@@ -23,7 +22,6 @@ class TestCategoryAPI:
         assert response.data['name'] == category.name
 
 
-@pytest.mark.django_db
 class TestPostAPI:
     def test_post_list(self, client, post):
         """Тест получения списка постов"""
@@ -91,7 +89,6 @@ class TestPostAPI:
         assert len(response.data['results']) == 0
 
 
-@pytest.mark.django_db
 class TestMediaAssetAPI:
     def test_media_list(self, client, media_asset):
         """Тест получения списка медиафайлов"""

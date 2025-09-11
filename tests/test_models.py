@@ -6,7 +6,6 @@ from django.utils import timezone
 from news.models import Category, Post, MediaAsset
 
 
-@pytest.mark.django_db
 class TestCategoryModel:
     def test_category_creation(self, category):
         """Тест создания категории"""
@@ -37,7 +36,6 @@ class TestCategoryModel:
             Category.objects.create(name='Test2', slug='duplicate')
 
 
-@pytest.mark.django_db
 class TestTagModel:
     def test_tag_creation(self, tag):
         """Тест создания тега"""
@@ -46,7 +44,6 @@ class TestTagModel:
         assert str(tag) == 'Test Tag'
 
 
-@pytest.mark.django_db
 class TestMediaAssetModel:
     def test_media_asset_creation(self, media_asset):
         """Тест создания медиафайла"""
@@ -60,7 +57,6 @@ class TestMediaAssetModel:
             asset.file.url
 
 
-@pytest.mark.django_db
 class TestPostModel:
     def test_post_creation(self, post):
         """Тест создания поста"""

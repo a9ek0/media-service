@@ -4,7 +4,6 @@ from unittest.mock import patch, MagicMock
 from news.renderers import render_body_from_json, render_block
 
 
-@pytest.mark.django_db
 class TestRender:
     def test_render_body_from_json(self):
         """Тест рендеринга JSON тела"""
