@@ -1,7 +1,8 @@
+from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from .models import Category, Post, MediaAsset, Tag
-from django.contrib import admin
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -12,9 +13,9 @@ class CategoryAdmin(admin.ModelAdmin):
     ordering = ("name",)
     list_per_page = 50
 
+    @admin.display(description=_("Количество подкатегорий"))
     def children_count(self, obj):
         return obj.children.count()
-    children_count.short_description = "Подкатегорий"
 
 
 @admin.register(Tag)
@@ -25,9 +26,9 @@ class TagAdmin(admin.ModelAdmin):
     ordering = ("name",)
     list_per_page = 100
 
+    @admin.display(description=_("Количество постов"))
     def posts_count(self, obj):
         return obj.posts.count()
-    posts_count.short_description = "Постов"
 
 
 @admin.register(MediaAsset)
@@ -38,19 +39,25 @@ class MediaAssetAdmin(admin.ModelAdmin):
     ordering = ("-uploaded_at",)
     list_per_page = 50
 
+    @admin.display(description=_("Файл"))
     def file_link(self, obj):
         if not obj.file:
-            return "-"
+            return format_html("<span style='color:#999;'>—</span>")
         url = obj.file.url
-        return format_html('<a href="{}" target="_blank">Open</a>', url)
-    file_link.short_description = "Файл"
+        return format_html(
+            '<a href="{}" target="_blank">Open</a>',
+            url
+        )
 
+    @admin.display(description=_("Предпросмотр"))
     def file_preview(self, obj):
         if not obj.file: 
-            return "-"
+            return format_html("<span style='color:#999;'>—</span>")
         url = obj.file.url
-        return format_html('<img src="{}" style="max-height:80px; max-width:160px; object-fit:cover;"/>', url)
-    file_preview.short_description = "Preview"
+        return format_html(
+            '<img src="{}" style="max-height:80px; max-width:160px; object-fit:cover;"/>',
+            url
+        )
 
 
 @admin.register(Post)
@@ -66,32 +73,35 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ("-published_at", "-updated_at")
     readonly_fields = ("views", "updated_at")
     fieldsets = (
-        ("Main", {"fields": ("title", "slug", "category", "cover", "tags")}),
-        ("Content", {"fields": ("excerpt", "body_json")}),
-        ("Publication", {"fields": ("status", "is_featured", "published_at")}),
-        ("Meta", {"fields": ("views", "updated_at")}),
+        (_("Main"), {"fields": ("title", "slug", "category", "cover", "tags")}),
+        (_("Content"), {"fields": ("excerpt", "body_json")}),
+        (_("Publication"), {"fields": ("status", "is_featured", "published_at")}),
+        (_("Meta"), {"fields": ("views", "updated_at")}),
     )
-    actions = ("make_published", "make_draft")
     list_per_page = 25
     save_on_top = True
+
+    actions = ("make_published", "make_draft")
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related("category", "cover").prefetch_related("tags")
 
+    @admin.display(description=_("Обложка"))
     def cover_preview(self, obj):
         if obj.cover and obj.cover.file:
-            return format_html('<img src="{}" style="max-height:60px; max-width:120px; object-fit:cover;" />', obj.cover.file.url)
-        return "-"
-    cover_preview.short_description = "Cover"
+            return format_html(
+                '<img src="{}" style="max-height:60px; max-width:120px; object-fit:cover;" />',
+                obj.cover.file.url)
+        return format_html("<span style='color:#999;'>—</span>")
 
-    @admin.action(description="Mark selected posts as published")
+    @admin.action(description=_("Отметить выбранные посты как опубликованные"))
     def make_published(self, request, queryset):
         updated = queryset.update(status="published")
         queryset.filter(published_at__isnull=True).update(published_at=__import__("django.utils.timezone").utils.timezone.now())
-        self.message_user(request, f"{updated} записей помечено как опубликованные")
+        self.message_user(request, _("%(count)d posts marked as published.") % {"count": updated})
 
-    @admin.action(description="Mark selected posts as draft")
+    @admin.action(description=_("Отметить выбранные посты как черновики"))
     def make_draft(self, request, queryset):
         updated = queryset.update(status="draft")
-        self.message_user(request, f"{updated} записей переведено в черновики")
+        self.message_user(request, _("%(count)d posts marked as draft.") % {"count": updated})
