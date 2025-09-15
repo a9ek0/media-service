@@ -26,12 +26,12 @@ SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key")
 
 # Environment variables
 load_dotenv(BASE_DIR / ".env")
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "default-api-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG")
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 

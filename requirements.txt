@@ -2,6 +2,7 @@ Django>=4.2
 djangorestframework
 psycopg2-binary
 python-dotenv
+requests
 django-filter
 django-cors-headers
 django-editorjs
