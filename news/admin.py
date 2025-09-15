@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from .models import Category, Post, MediaAsset, Tag
+from .models import Category, Post, MediaAsset, Tag, Video
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -105,3 +105,54 @@ class PostAdmin(admin.ModelAdmin):
     def make_draft(self, request, queryset):
         updated = queryset.update(status="draft")
         self.message_user(request, _("%(count)d posts marked as draft.") % {"count": updated})
+
+
+@admin.register(Video)
+class VideoAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "slug",
+        "youtube_url",
+        "rutube_url",
+        "vkvideo_url",
+        "views",
+        "created_at",
+        "updated_at",
+        "thumbnail_preview",
+    )
+    list_filter = ("status", "is_featured", "created_at", "updated_at", "category", "tags")
+    search_fields = ("title", "description", "slug")
+    prepopulated_fields = {"slug": ("title",)}
+    autocomplete_fields = ("category", "tags")
+    ordering = ("-published_at", "-updated_at")
+    readonly_fields = ("thumbnail_preview", "created_at", "updated_at", "views")
+    date_hierarchy = "published_at"
+    list_per_page = 25
+    save_on_top = True
+
+    fieldsets = (
+        (_("Основное"), {
+            "fields": ("title", "slug", "description", "category", "tags")
+        }),
+        (_("Источники видео"), {
+            "fields": ("youtube_url", "rutube_url", "vkvideo_url")
+        }),
+        (_("Метаданные"), {
+            "fields": ("thumbnail_url", "thumbnail_preview")
+        }),
+        (_("Публикация"), {
+            "fields": ("status", "is_featured", "published_at")
+        }),
+        (_("Служебные"), {
+            "fields": ("views", "created_at", "updated_at")
+        }),
+    )
+
+    @admin.display(description=_("Миниатюра"))
+    def thumbnail_preview(self, obj):
+        if obj.thumbnail_url:
+            return format_html(
+                '<img src="{}" style="max-height:80px; max-width:160px; object-fit:cover;" />',
+                obj.thumbnail_url
+            )
+        return format_html("<span style='color:#999;'>—</span>")
