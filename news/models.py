@@ -243,32 +243,22 @@ class Video(models.Model):
     title = models.CharField(
         max_length=200,
         blank=True,
-        editable=False,
         verbose_name=_("Заголовок"),
-        help_text=_("Краткий заголовок статьи, до 200 символов"))
+        help_text=_("Автозаполняется. Краткий заголовок статьи, до 200 символов"))
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        editable=False,
         verbose_name=_("Slug"),
         help_text=_("Автозаполняется. Используется в URL")
     )
     description = models.TextField(
         blank=True,
-        editable=False,
         verbose_name=_("Описание"),
-        help_text=_("Необязательно. Пояснение к категории.")
+        help_text=_("Автозаполняется. Необязательно. Пояснение к категории.")
     )
     thumbnail_url = models.URLField(
         blank=True,
-        editable=False,
-        verbose_name=_("Ссылка на обложку")
-    )
-    external_id = models.CharField(
-        max_length=50,
-        blank=True,
-        editable=False,
-        verbose_name=_("ID видео")
+        verbose_name=_("Автозаполняется. Ссылка на обложку")
     )
 
     category = models.ForeignKey(
@@ -305,6 +295,10 @@ class Video(models.Model):
         blank=True,
         verbose_name=_("Дата публикации")
     )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_("Обновлено")
+    )
     views = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Просмотры")
@@ -323,17 +317,27 @@ class Video(models.Model):
             models.Index(fields=['-published_at', 'status']),
         ]
 
-    def extract_youtube_id(self, url):
-        patterns = [
-            r'(?:v=|\/)([0-9A-Za-z_-]{11})',
-            r'(?:embed\/|v\/|youtu\.be\/)([0-9A-Za-z_-]{11})'
-        ]
-        for pattern in patterns:
+    def extract_video_id(self, url, platform):
+        patterns = {
+            'youtube': [
+                r'(?:v=|\/)([0-9A-Za-z_-]{11})',
+                r'(?:embed\/|v\/|youtu\.be\/)([0-9A-Za-z_-]{11})'
+            ],
+            'rutube': [
+                r'rutube\.ru\/video\/([a-zA-Z0-9]+)\/',
+                r'rutube\.ru\/play\/embed\/([a-zA-Z0-9]+)'
+            ],
+            'vk': [
+                r'vk\.com\/video(-?\d+_\d+)',
+                r'vk\.com\/video\?z=video(-?\d+_\d+)'
+            ]
+        }
+
+        for pattern in patterns.get(platform, []):
             match = re.search(pattern, url)
             if match:
                 return match.group(1)
         return None
-
     def fetch_youtube_metadata(self, video_id):
         try:
             from django.conf import settings
@@ -353,15 +357,13 @@ class Video(models.Model):
                     'title': snippet['title'],
                     'description': snippet.get('description', ''),
                     'thumbnail_url': snippet['thumbnails']['high']['url'],
-                    'external_id': video_id,
                 }
         except Exception as e:
             print(f"Error fetching YouTube metadata: {e}")
         return None
 
-    def fetch_rutube_metadata(self, url):
+    def fetch_rutube_metadata(self, video_id):
         try:
-            video_id = url.rstrip('/').split('/')[-1]
             api_url = f"https://rutube.ru/api/video/{video_id}/"
             response = requests.get(api_url, timeout=5)
             if response.status_code != 200:
@@ -372,7 +374,6 @@ class Video(models.Model):
                 'title': data['title'],
                 'description': data.get('description', ''),
                 'thumbnail_url': data['thumbnail_url'],
-                'external_id': video_id,
             }
         except Exception as e:
             print(f"Error fetching Rutube meta {e}")
@@ -380,12 +381,14 @@ class Video(models.Model):
 
     def fetch_metadata(self):
         if self.youtube_url:
-            video_id = self.extract_youtube_id(self.youtube_url)
+            video_id = self.extract_video_id(self.youtube_url, 'youtube')
             if video_id:
                 return self.fetch_youtube_metadata(video_id)
 
         if self.rutube_url:
-            return self.fetch_rutube_metadata(self.rutube_url)
+            video_id = self.extract_video_id(self.youtube_url, 'rutube')
+            if video_id:
+                return self.fetch_rutube_metadata(self.rutube_url)
 
         if self.vkvideo_url:
             pass
@@ -397,7 +400,6 @@ class Video(models.Model):
                 self.title = metadata['title']
                 self.description = metadata['description']
                 self.thumbnail_url = metadata['thumbnail_url']
-                self.external_id = metadata['external_id']
 
         if not self.slug and self.title:
             self.slug = slugify(self.title)[:200]
@@ -408,6 +410,15 @@ class Video(models.Model):
             self.published_at = None
 
         super().save(*args, **kwargs)
+
+    def get_primary_url(self):
+        if self.youtube_url:
+            return self.youtube_url
+        elif self.rutube_url:
+            return self.rutube_url
+        elif self.vkvideo_url:
+            return self.vkvideo_url
+        return None
 
     def __str__(self):
         return self.title or _("Без названия")
