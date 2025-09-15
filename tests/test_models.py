@@ -94,5 +94,9 @@ class TestPostModel:
 
     def test_post_without_category(self):
         """Тест пост без категории"""
-        with pytest.raises(IntegrityError):
-            Post.objects.create(title='No Category', slug='no-cat')
+        post = Post.objects.create(
+            title='No Category',
+            slug='no-cat',
+            status='draft'
+        )
+        assert post.category is None

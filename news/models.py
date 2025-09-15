@@ -386,20 +386,30 @@ class Video(models.Model):
                 return self.fetch_youtube_metadata(video_id)
 
         if self.rutube_url:
-            video_id = self.extract_video_id(self.youtube_url, 'rutube')
+            video_id = self.extract_video_id(self.rutube_url, 'rutube')
             if video_id:
-                return self.fetch_rutube_metadata(self.rutube_url)
+                return self.fetch_rutube_metadata(video_id)
 
         if self.vkvideo_url:
             pass
 
     def save(self, *args, **kwargs):
-        if not self.pk:
+        if self.pk:
+            old = Video.objects.get(pk=self.pk)
+            urls_changed = (
+                    self.youtube_url != old.youtube_url or
+                    self.rutube_url != old.rutube_url or
+                    self.vkvideo_url != old.vkvideo_url
+            )
+        else:
+            urls_changed = True
+
+        if urls_changed:
             metadata = self.fetch_metadata()
             if metadata:
-                self.title = metadata['title']
-                self.description = metadata['description']
-                self.thumbnail_url = metadata['thumbnail_url']
+                self.title = metadata.get('title', self.title)
+                self.description = metadata.get('description', self.description)
+                self.thumbnail_url = metadata.get('thumbnail_url', self.thumbnail_url)
 
         if not self.slug and self.title:
             self.slug = slugify(self.title)[:200]
