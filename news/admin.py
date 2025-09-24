@@ -73,10 +73,10 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ("-published_at", "-updated_at")
     readonly_fields = ("views", "updated_at")
     fieldsets = (
-        (_("Main"), {"fields": ("title", "slug", "category", "cover", "tags")}),
-        (_("Content"), {"fields": ("excerpt", "body_json")}),
-        (_("Publication"), {"fields": ("status", "is_featured", "published_at")}),
-        (_("Meta"), {"fields": ("views", "updated_at")}),
+        (_("Основное"), {"fields": ("title", "slug", "category", "cover", "tags")}),
+        (_("Контент"), {"fields": ("excerpt", "body_json")}),
+        (_("Публикация"), {"fields": ("status", "is_featured", "published_at")}),
+        (_("Метаданные"), {"fields": ("views", "updated_at")}),
     )
     list_per_page = 25
     save_on_top = True
@@ -109,17 +109,7 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
-    list_display = (
-        "title",
-        "slug",
-        "youtube_url",
-        "rutube_url",
-        "vkvideo_url",
-        "views",
-        "created_at",
-        "updated_at",
-        "thumbnail_preview",
-    )
+    list_display = ( "title", "slug", "youtube_url", "rutube_url", "vkvideo_url", "views", "created_at", "updated_at", "thumbnail_preview",)
     list_filter = ("status", "is_featured", "created_at", "updated_at", "category", "tags")
     search_fields = ("title", "description", "slug")
     prepopulated_fields = {"slug": ("title",)}

@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .renderers import render_body_from_json
-from .models import Category, Tag, Post, MediaAsset, Video
+from news.models import Category, Tag, Post, MediaAsset, Video
 from .serializers import CategorySerializer, TagSerializer, PostSerializer, MediaAssetSerializer, VideoSerializer
 
 class BaseViewSet(viewsets.ModelViewSet):

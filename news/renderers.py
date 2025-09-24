@@ -1,4 +1,3 @@
-import json
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from .models import MediaAsset

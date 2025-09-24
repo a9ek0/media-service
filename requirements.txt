@@ -12,3 +12,4 @@ model_bakery
 pytest
 pytest-django
 drf-spectacular
+django-environ
