@@ -1,0 +1,44 @@
+[
+  {
+    "model": "news.video",
+    "pk": 1,
+    "fields": {
+      "youtube_url": "https://www.youtube.com/watch?v=98_5V4TxDa4",
+      "rutube_url": "",
+      "vkvideo_url": "",
+      "title": "Первое видео",
+      "thumbnail_url": "https://example.com/thumb1.jpg",
+      "category": 3,
+      "author": 1,
+      "status": "published",
+      "title_picture": "",
+      "tags": [
+        3
+      ],
+      "created_at": "2025-09-29T10:00:00Z",
+      "published_at": "2025-09-29T10:00:00Z",
+      "updated_at": "2025-09-29T10:00:00Z",
+      "views": 0
+    }
+  },
+  {
+    "model": "news.video",
+    "pk": 2,
+    "fields": {
+      "youtube_url": "https://www.youtube.com/watch?v=RB5cf2VyPCQ",
+      "rutube_url": "",
+      "vkvideo_url": "",
+      "title": "Второе видео",
+      "thumbnail_url": "https://example.com/thumb2.jpg",
+      "category": 3,
+      "author": 1,
+      "status": "draft",
+      "title_picture": "",
+      "tags": [],
+      "created_at": "2025-09-29T11:00:00Z",
+      "published_at": null,
+      "updated_at": "2025-09-29T11:00:00Z",
+      "views": 0
+    }
+  }
+]

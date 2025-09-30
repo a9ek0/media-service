@@ -3,80 +3,33 @@
     "model": "news.category",
     "pk": 1,
     "fields": {
-      "name": "Новости Авто",
-      "slug": "auto-news",
+      "type": "article",
+      "name": "Новости",
+      "slug": "novosti",
       "parent": null,
-      "description": "Свежие новости автомобильной индустрии"
+      "description": "Категория для новостей"
     }
   },
   {
     "model": "news.category",
     "pk": 2,
     "fields": {
-      "name": "Тест-драйвы",
-      "slug": "test-drives",
-      "parent": 1,
-      "description": "Обзоры и тест-драйвы автомобилей"
+      "type": "article",
+      "name": "Технологии",
+      "slug": "tekhnologii",
+      "parent": null,
+      "description": "Новости технологий и IT"
     }
   },
   {
     "model": "news.category",
     "pk": 3,
     "fields": {
-      "name": "Электромобили",
-      "slug": "electric-cars",
-      "parent": 1,
-      "description": "Новости мира электромобилей"
-    }
-  },
-  {
-    "model": "news.category",
-    "pk": 4,
-    "fields": {
-      "name": "Технологии",
-      "slug": "tech",
+      "type": "video",
+      "name": "Обзоры",
+      "slug": "obzory",
       "parent": null,
-      "description": "Автотехнологии и инновации"
-    }
-  },
-  {
-    "model": "news.category",
-    "pk": 5,
-    "fields": {
-      "name": "Гибридные Автомобили",
-      "slug": "hybrid-cars",
-      "parent": 1,
-      "description": "Обзоры и новости о гибридных автомобилях"
-    }
-  },
-  {
-    "model": "news.category",
-    "pk": 6,
-    "fields": {
-      "name": "Автоспорт",
-      "slug": "motorsport",
-      "parent": null,
-      "description": "Новости из мира автоспорта и гонок"
-    }
-  },
-  {
-    "model": "news.category",
-    "pk": 7,
-    "fields": {
-      "name": "Формула 1",
-      "slug": "formula-one",
-      "parent": 6,
-      "description": "Новости Формулы 1"
-    }
-  },
-  {
-    "model": "news.category",
-    "pk": 8,
-    "fields": {
-      "name": "Автосервис",
-      "slug": "car-service",
-      "parent": null,
-      "description": "Советы по обслуживанию и ремонту автомобилей"
+      "description": "Видео обзоры"
     }
   }
 ]

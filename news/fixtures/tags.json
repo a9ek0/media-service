@@ -1,14 +1,26 @@
 [
-  {"model": "news.tag", "pk": 1, "fields": {"name": "Обзор", "slug": "obzor"}},
-  {"model": "news.tag", "pk": 2, "fields": {"name": "Тест-драйв", "slug": "test-drive"}},
-  {"model": "news.tag", "pk": 3, "fields": {"name": "Электро", "slug": "electric"}},
-  {"model": "news.tag", "pk": 4, "fields": {"name": "Инновации", "slug": "innovation"}},
-  {"model": "news.tag", "pk": 5, "fields": {"name": "Безопасность", "slug": "safety"}},
-  {"model": "news.tag", "pk": 6, "fields": {"name": "Гибрид", "slug": "hybrid"}},
-  {"model": "news.tag", "pk": 7, "fields": {"name": "Премиум", "slug": "premium"}},
-  {"model": "news.tag", "pk": 8, "fields": {"name": "Кроссовер", "slug": "crossover"}},
-  {"model": "news.tag", "pk": 9, "fields": {"name": "Спорткар", "slug": "sports-car"}},
-  {"model": "news.tag", "pk": 10, "fields": {"name": "Эконом", "slug": "economy"}},
-  {"model": "news.tag", "pk": 11, "fields": {"name": "Концепт", "slug": "concept"}},
-  {"model": "news.tag", "pk": 12, "fields": {"name": "Автопилот", "slug": "autopilot"}}
+  {
+    "model": "news.tag",
+    "pk": 1,
+    "fields": {
+      "name": "ПДД",
+      "slug": "pdd"
+    }
+  },
+  {
+    "model": "news.tag",
+    "pk": 2,
+    "fields": {
+      "name": "IT",
+      "slug": "it"
+    }
+  },
+  {
+    "model": "news.tag",
+    "pk": 3,
+    "fields": {
+      "name": "Обзоры",
+      "slug": "obzory-tag"
+    }
+  }
 ]

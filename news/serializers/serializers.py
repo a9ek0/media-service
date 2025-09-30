@@ -1,7 +1,16 @@
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+import markdown
 from rest_framework import serializers
 
-from .models import Category, Post, Tag, MediaAsset, Video
+from news.models import Category, Post, Tag, Video
+
+__all__ = [
+    "CategorySerializer",
+    "TagSerializer",
+    "PostSerializer",
+    "VideoSerializer"
+]
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -14,13 +23,6 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ["id", "name", "slug"]
-
-
-class MediaAssetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MediaAsset
-        fields = ["id", "file", "alt", "uploaded_at", "original_name"]
-
 
 class PostSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -36,16 +38,17 @@ class PostSerializer(serializers.ModelSerializer):
         source="tags",
         write_only=True
     )
-    cover = MediaAssetSerializer(read_only=True)
-    cover_id = serializers.PrimaryKeyRelatedField(
-        queryset=MediaAsset.objects.all(),
-        source="cover",
-        write_only=True,
-        required=False,
-        allow_null=True
+    author_id = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(),
+        source='author',
+        write_only=True
     )
-    body_json = serializers.JSONField(required=False, allow_null=True)
+
     body = serializers.CharField(required=False, allow_blank=True)
+    body_html = serializers.SerializerMethodField(read_only=True)
+
+    def get_body_html(self, obj):
+        return markdown.markdown(obj.body)
 
     class Meta:
         model = Post
@@ -53,13 +56,14 @@ class PostSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "slug",
+            "author_id",
             "category",
             "category_id",
-            "excerpt",
+            "lead",
             "body",
-            "cover",
-            "cover_id",
+            "body_html",
             "status",
+            "title_picture",
             "is_featured",
             "created_at",
             "published_at",
@@ -67,7 +71,6 @@ class PostSerializer(serializers.ModelSerializer):
             "views",
             "tags",
             "tag_ids",
-            "body_json"
         ]
         read_only_fields = [
             "views",
@@ -75,7 +78,6 @@ class PostSerializer(serializers.ModelSerializer):
             "updated_at",
             "slug"
         ]
-
 
 class VideoSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -94,39 +96,13 @@ class VideoSerializer(serializers.ModelSerializer):
         source="tags",
         write_only=True
     )
+    author_id = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(),
+        source='author',
+        write_only=True
+    )
 
     video_url = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = Video
-        fields = [
-            "id", "youtube_url",
-            "rutube_url",
-            "vkvideo_url",
-            "video_url",
-            "title",
-            "slug",
-            "description",
-            "thumbnail_url",
-            "category",
-            "category_id",
-            "tags",
-            "tag_ids",
-            "status",
-            "is_featured",
-            "created_at",
-            "published_at",
-            "updated_at",
-            "views"
-        ]
-        read_only_fields = [
-            "title", "slug",
-            "description",
-            "thumbnail_url",
-            "created_at",
-            "updated_at",
-            "views"
-        ]
 
     def get_video_url(self, obj):
         return obj.get_primary_url()
@@ -144,3 +120,30 @@ class VideoSerializer(serializers.ModelSerializer):
             )
 
         return data
+
+    class Meta:
+        model = Video
+        fields = [
+            "id", "youtube_url",
+            "rutube_url",
+            "vkvideo_url",
+            "video_url",
+            "title",
+            "thumbnail_url",
+            "author_id",
+            "category",
+            "category_id",
+            "tags",
+            "tag_ids",
+            "status",
+            "created_at",
+            "published_at",
+            "updated_at",
+            "views"
+        ]
+        read_only_fields = [
+            "thumbnail_url",
+            "created_at",
+            "updated_at",
+            "views"
+        ]

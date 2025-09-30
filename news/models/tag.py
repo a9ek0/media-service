@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Tag(models.Model):
+    """Тег для статьи/видео"""
+
     name = models.CharField(
         max_length=100,
         unique=True,

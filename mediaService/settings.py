@@ -17,10 +17,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key")
 
@@ -33,10 +29,11 @@ DEBUG = os.getenv("DEBUG")
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "auth.User"
+
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -49,6 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     "drf_spectacular",
+    "unfold",
+    'django.contrib.admin',
 
     'news'
 ]
@@ -167,10 +166,6 @@ REST_FRAMEWORK = {
     ],
 
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-
-#    'DEFAULT_PERMISSION_CLASSES': [
-#       'rest_framework.permissions.IsAuthenticated',
-#    ],
 }
 
 # Database

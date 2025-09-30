@@ -3,6 +3,20 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Category(models.Model):
+    """Категория для статьи/видео"""
+
+    CATEGORY_TYPES = [
+        ('article', _('Статья')),
+        ('video', _('Видео')),
+    ]
+
+    type = models.CharField(
+        max_length=20,
+        choices=CATEGORY_TYPES,
+        default='article',
+        verbose_name=_("Тип категории"),
+        help_text=_("Для совместимости с API v2")
+    )
     name = models.CharField(
         max_length=100,
         verbose_name=_("Название"),
