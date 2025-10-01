@@ -69,15 +69,6 @@ class NewsFeedQueryParamsSerializer(serializers.Serializer):
     categoryId = serializers.IntegerField(required=False)
     allNews = serializers.BooleanField(default=False)
 
-    def to_internal_value(self, data):
-        mapped = {
-            'page_size': data.get('pageSize', data.get('page_size', 20)),
-            'page_number': data.get('pageNumber', data.get('page_number', 1)),
-            'category_id': data.get('categoryId', data.get('category_id')),
-            'all_news': data.get('allNews', data.get('all_news', 'false')).lower() in ('true', '1', 'yes')
-        }
-        return super().to_internal_value(mapped)
-
 class NewsFeedExcludedRequestSerializer(serializers.Serializer):
     excluded = serializers.ListField(
         child=serializers.IntegerField(min_value=1),

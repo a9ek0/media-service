@@ -11,7 +11,8 @@ from rest_framework.views import APIView
 from django.utils.translation import gettext_lazy as _
 
 from news.models import Category, Post, Video
-from news.serializers.apiv2_serializers import PostSerializer, NewsItemSerializer, CategorySerializer, NewsFeedQueryParamsSerializer, \
+from news.serializers.apiv2_serializers import PostSerializer, NewsItemSerializer, CategorySerializer, \
+    NewsFeedQueryParamsSerializer, \
     NewsFeedExcludedRequestSerializer
 
 
@@ -27,7 +28,7 @@ class NewsFeedAPIView(APIView):
 
     @extend_schema(
         parameters=[NewsFeedQueryParamsSerializer],
-        responses={ 200: PostSerializer(many=True), },
+        responses={200: PostSerializer(many=True), },
         description="Получить ленту новостей и видео.",
         summary="Лента новостей",
         tags=["Новости"]
@@ -42,54 +43,61 @@ class NewsFeedAPIView(APIView):
         category_id = params.get('categoryId')
         all_news = params['allNews']
 
-        articles = Post.objects.filter(status='published').select_related('category', 'author')
-        videos = Video.objects.filter(status='published').select_related('category', 'author')
+        articles_qs = Post.objects.filter(status='published') \
+            .only('id', 'title', 'lead', 'published_at', 'created_at', 'title_picture', 'category_id') \
+            .select_related('category') \
+            .prefetch_related('category__children')
 
-        if category_id:
-            try:
-                category_id_int = int(category_id)
-                articles = articles.filter(category_id=category_id_int)
-                videos = videos.filter(category_id=category_id_int)
-            except ValueError:
-                pass
+        videos_qs = Video.objects.filter(status='published') \
+            .only('id', 'title', 'lead', 'published_at', 'created_at', 'title_picture', 'category_id') \
+            .select_related('category') \
+            .prefetch_related('category__children')
 
-        articles_list = list(articles)
-        videos_list = list(videos)
+        if category_id is not None:
+            articles_qs = articles_qs.filter(category_id=category_id)
+            videos_qs = videos_qs.filter(category_id=category_id)
 
-        all_content = sorted(
-            articles_list + videos_list,
-            key=lambda x: x.published_at if x.published_at else x.created_at,
+        if all_news:
+            articles_list = list(articles_qs.order_by('-published_at', '-updated_at'))
+            videos_list = list(videos_qs.order_by('-published_at', '-updated_at'))
+
+            total_count = len(articles_list) + len(videos_list)
+
+            combined = sorted(
+                articles_list + videos_list,
+                key=lambda x: x.published_at or x.created_at,
+                reverse=True
+            )
+            serializer = NewsItemSerializer(combined, many=True)
+            return Response({
+                'data': serializer.data,
+                'meta': {'totalCount': total_count}
+            })
+
+        total_count = articles_qs.count() + videos_qs.count()
+
+        limit = page_size * page_number
+        articles_slice = list(articles_qs.order_by('-published_at', '-updated_at')[:limit])
+        videos_slice = list(videos_qs.order_by('-published_at', '-updated_at')[:limit])
+
+        combined = sorted(
+            articles_slice + videos_slice,
+            key=lambda x: x.published_at or x.created_at,
             reverse=True
         )
 
-        if all_news:
-            serializer = NewsItemSerializer(all_content, many=True)
-            return Response({
-                'data': serializer.data,
-                'meta': {
-                    'totalCount': len(all_content)
-                }
-            })
+        start = (page_number - 1) * page_size
+        page_items = combined[start:start + page_size]
 
-        paginator = NewsFeedPagination()
-        paginator.page_size = page_size
-
-        start_index = (page_number - 1) * page_size
-        end_index = start_index + page_size
-        paginated_content = all_content[start_index:end_index]
-
-        serializer = NewsItemSerializer(paginated_content, many=True)
-
+        serializer = NewsItemSerializer(page_items, many=True)
         return Response({
             'data': serializer.data,
-            'meta': {
-                'totalCount': len(all_content),
-            }
+            'meta': {'totalCount': total_count}
         })
 
     @extend_schema(
         request=NewsFeedExcludedRequestSerializer,
-        responses={ 200: PostSerializer(many=True), },
+        responses={200: PostSerializer(many=True), },
         description="Получить полную ленту новостей и видео, исключая элементы с указанными ID.",
         summary="Лента новостей с исключением по ID",
         tags=["Новости"]
@@ -97,26 +105,33 @@ class NewsFeedAPIView(APIView):
     def post(self, request):
         input_serializer = NewsFeedExcludedRequestSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
-        excluded_ids = input_serializer.validated_data['excluded']
+        excluded_ids = input_serializer.validated_data.get('excluded', [])
 
-        articles = Post.objects.filter(status='published').exclude(id__in=excluded_ids)
-        videos = Video.objects.filter(status='published').exclude(id__in=excluded_ids)
+        articles_qs = Post.objects.filter(status='published') \
+            .exclude(id__in=excluded_ids) \
+            .only('id', 'title', 'lead', 'published_at', 'created_at', 'title_picture', 'category_id') \
+            .select_related('category') \
+            .prefetch_related('category__children')
 
-        articles_list = list(articles)
-        videos_list = list(videos)
+        videos_qs = Video.objects.filter(status='published') \
+            .exclude(id__in=excluded_ids) \
+            .only('id', 'title', 'lead', 'published_at', 'created_at', 'title_picture', 'category_id') \
+            .select_related('category') \
+            .prefetch_related('category__children')
 
-        all_content = sorted(
+        articles_list = list(articles_qs)
+        videos_list = list(videos_qs)
+        combined = sorted(
             articles_list + videos_list,
-            key=lambda x: x.published_at if x.published_at else x.created_at,
+            key=lambda x: x.published_at or x.created_at,
             reverse=True
         )
 
-        serializer = NewsItemSerializer(all_content, many=True)
+        total_count = len(articles_list) + len(videos_list)
+        serializer = NewsItemSerializer(combined, many=True)
         return Response({
             'data': serializer.data,
-            'meta': {
-                'totalCount': len(all_content)
-            }
+            'meta': {'totalCount': total_count}
         })
 
 
