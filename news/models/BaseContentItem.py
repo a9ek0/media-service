@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -85,11 +84,17 @@ class BaseContentItem(models.Model):
         ]
 
     def save(self, *args, **kwargs):
-        if self.status == 'published' and not self.published_at:
+        if self.status == 'draft' and self.published_at and self.published_at <= timezone.now():
+            self.status = 'published'
+        elif self.status == 'published' and not self.published_at:
             self.published_at = timezone.now()
-        elif self.status == 'draft':
-            self.published_at = None
         super().save(*args, **kwargs)
+
+    @classmethod
+    def publish_scheduled(cls):
+        drafts_to_publish = cls.objects.filter(status='draft', published_at__lte=timezone.now())
+        if drafts_to_publish.exists():
+            drafts_to_publish.update(status='published')
 
     @property
     def title_picture_url(self):

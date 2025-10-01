@@ -13,3 +13,5 @@ drf-spectacular
 django-environ
 django-unfold
 markdown
+celery
+redis
