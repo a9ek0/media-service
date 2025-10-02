@@ -130,14 +130,14 @@ class VideoViewSet(BaseViewSet):
         if metadata:
             video.title = metadata.get('title', video.title)
             video.description = metadata.get('description', video.description)
-            video.thumbnail_url = metadata.get('thumbnail_url', video.thumbnail_url)
+            video.title_picture = metadata.get('thumbnail_url', video.title_picture)
             video.save()
 
             return Response({
                 "success": True,
                 "message": _("Метаданные обновлены"),
                 "title": video.title,
-                "thumbnail_url": video.thumbnail_url
+                "thumbnail_url": video.title_picture
             })
 
         return Response({

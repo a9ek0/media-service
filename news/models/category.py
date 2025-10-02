@@ -37,11 +37,6 @@ class Category(models.Model):
         verbose_name=_("Родительская категория"),
         help_text = _("Оставьте пустым для корневой категории")
     )
-    description = models.TextField(
-        blank=True,
-        verbose_name=_("Описание"),
-        help_text=_("Необязательно. Пояснение к категории.")
-    )
 
     class Meta:
         verbose_name = _("Категория")

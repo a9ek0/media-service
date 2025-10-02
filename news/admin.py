@@ -23,15 +23,20 @@ class CategoryAdmin(ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(ModelAdmin):
-    list_display = ("name", "slug", "posts_count")
+    list_display = ("name", "slug", "contents_count")
     search_fields = ("name", "slug")
     prepopulated_fields = {"slug": ("name",)}
     ordering = ("name",)
     list_per_page = 100
 
-    @admin.display(description=_("Количество постов"))
-    def posts_count(self, obj):
-        return obj.posts.count()
+    @admin.display(description=_("Количество материалов"))
+    def contents_count(self, obj):
+        total = 0
+        for rel in obj._meta.related_objects:
+            rel_name = rel.get_accessor_name()
+            if hasattr(obj, rel_name):
+                total += getattr(obj, rel_name).count()
+        return total
 
 @admin.register(Post)
 class PostAdmin(ModelAdmin):
@@ -79,7 +84,7 @@ class PostAdmin(ModelAdmin):
 
 @admin.register(Video)
 class VideoAdmin(ModelAdmin):
-    list_display = ("title", "author", "youtube_url", "rutube_url", "vkvideo_url", "views", "created_at", "updated_at", "thumbnail_preview")
+    list_display = ("title", "lead", "author", "youtube_url", "rutube_url", "vkvideo_url", "views", "created_at", "updated_at", "thumbnail_preview")
     list_filter = ("status", "created_at", "updated_at", "category", "author")
     search_fields = ("title", "author__username")
     autocomplete_fields = ("category", "tags", "author")
@@ -91,7 +96,7 @@ class VideoAdmin(ModelAdmin):
     save_on_top = True
 
     fieldsets = (
-        (_("Основное"), {"fields": ("title", "category", "author")}),
+        (_("Основное"), {"fields": ("title", "lead", "category", "tags", "author")}),
         (_("Источники видео"), {"fields": ("youtube_url", "rutube_url", "vkvideo_url")}),
         (_("Публикация"), {"fields": ("status", "published_at")}),
         (_("Служебные"), {"fields": ("views", "created_at", "updated_at")}),
@@ -121,6 +126,6 @@ class VideoAdmin(ModelAdmin):
 
     @admin.display(description=_("Превью"))
     def thumbnail_preview(self, obj):
-        if obj.thumbnail_url:
-            return format_html('<img src="{}" style="height: 100px;" />', obj.thumbnail_url)
+        if obj.title_picture:
+            return format_html('<img src="{}" style="height: 100px;" />', obj.title_picture)
         return "-"

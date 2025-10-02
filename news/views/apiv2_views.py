@@ -12,8 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 from news.models import Category, Post, Video
 from news.serializers.apiv2_serializers import PostSerializer, NewsItemSerializer, CategorySerializer, \
-    NewsFeedQueryParamsSerializer, \
-    NewsFeedExcludedRequestSerializer
+    NewsFeedQueryParamsSerializer, NewsFeedExcludedRequestSerializer
 
 
 class NewsFeedPagination(PageNumberPagination):
@@ -21,7 +20,6 @@ class NewsFeedPagination(PageNumberPagination):
     page_size_query_param = 'pageSize'
     page_query_param = 'pageNumber'
     max_page_size = 100
-
 
 class NewsFeedAPIView(APIView):
     serializer_class = NewsItemSerializer
@@ -134,7 +132,6 @@ class NewsFeedAPIView(APIView):
             'meta': {'totalCount': total_count}
         })
 
-
 class NewsCategoriesAPIView(APIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
@@ -151,7 +148,6 @@ class NewsCategoriesAPIView(APIView):
         return Response({
             'data': serializer.data
         })
-
 
 @extend_schema(
     responses={

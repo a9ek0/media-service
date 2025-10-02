@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import Truncator
 
 from requests.exceptions import RequestException, Timeout
 
@@ -39,9 +40,15 @@ class Video(BaseContentItem):
         verbose_name=_("Название"),
         help_text=_("Автозаполняется. Название видео, до 200 символов")
     )
-    thumbnail_url = models.URLField(
+    title_picture = models.URLField(
+        null=True,
         blank=True,
         verbose_name=_("Автозаполняется. Ссылка на обложку")
+    )
+    lead = models.TextField(
+        blank=True,
+        verbose_name=_("Лид/описание"),
+        help_text=_("Автозаполняется. Описание видео")
     )
 
     @staticmethod
@@ -91,7 +98,7 @@ class Video(BaseContentItem):
 
             return {
                 'title': snippet['title'][:200],
-                'description': snippet.get('description', '')[:500],
+                'lead': Truncator(snippet.get('description', '')).chars(200, truncate='...'),
                 'thumbnail_url': snippet['thumbnails']['high']['url'],
             }
 
@@ -121,7 +128,7 @@ class Video(BaseContentItem):
 
             return {
                 'title': data.get('title', '')[:200],
-                'description': data.get('description', '')[:500],
+                'lead': Truncator(data.get('description', '')).chars(200, truncate='...'),
                 'thumbnail_url': data.get('thumbnail_url', ''),
             }
 
@@ -177,8 +184,12 @@ class Video(BaseContentItem):
         if urls_changed:
             metadata = self.fetch_metadata()
             if metadata:
-                self.title = metadata.get('title', self.title)
-                self.thumbnail_url = metadata.get('thumbnail_url', self.thumbnail_url)
+                if not self.title:
+                    self.title = metadata.get('title', self.title)
+                if not self.title_picture:
+                    self.title_picture = metadata.get('thumbnail_url', self.title_picture)
+                if not self.lead:
+                    self.lead = metadata.get('lead')
 
         if self.status == 'published' and not self.published_at:
             self.published_at = timezone.now()

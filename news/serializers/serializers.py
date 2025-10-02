@@ -16,8 +16,7 @@ __all__ = [
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "name", "slug", "parent", "description"]
-
+        fields = ["id", "name", "slug", "parent"]
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:

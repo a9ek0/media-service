@@ -22,6 +22,11 @@ class Post(BaseContentItem):
         verbose_name=_("Slug"),
         help_text=_("Автозаполняется. Используется в URL")
     )
+    lead = models.TextField(
+        blank=True,
+        verbose_name=_("Лид/описание"),
+        help_text=_("Описание поста")
+    )
 
     class Meta:
         verbose_name = _("Cтатья")

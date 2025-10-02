@@ -15,12 +15,12 @@ class BaseContentItem(models.Model):
     title = models.CharField(
         max_length=200,
         verbose_name=_("Заголовок"),
-        help_text = _("Краткий заголовок статьи, до 200 символов")
+        help_text = _("Краткий заголовок, до 200 символов")
     )
     lead = models.TextField(
         blank=True,
         verbose_name=_("Лид/описание"),
-        help_text=_("Появится в списке постов")
+        help_text=_("Описание контента")
     )
 
     category = models.ForeignKey(
@@ -63,11 +63,10 @@ class BaseContentItem(models.Model):
         verbose_name=_("Обновлено")
     )
 
-    title_picture = models.CharField(
-        max_length=200,
+    title_picture = models.URLField(
+        null=True,
         blank=True,
-        verbose_name=_("S3 ключ (md5)"),
-        help_text=_("MD5-хеш, 32 символа в нижнем регистре")
+        verbose_name=_("Ссылка на обложку")
     )
 
     views = models.PositiveIntegerField(default=0, verbose_name=_("Просмотры"))
@@ -95,16 +94,6 @@ class BaseContentItem(models.Model):
         drafts_to_publish = cls.objects.filter(status='draft', published_at__lte=timezone.now())
         if drafts_to_publish.exists():
             drafts_to_publish.update(status='published')
-
-    @property
-    def title_picture_url(self):
-        if len(self.title_picture) != 32:
-            return ""
-
-        folder = self.title_picture[:3]
-        filename = f"{self.title_picture}.jpg"
-
-        return f"https://api.bamper.by/upload/iblock/{folder}/{filename}"
 
     @property
     def is_published(self):

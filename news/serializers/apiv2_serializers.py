@@ -1,3 +1,4 @@
+from numpy.lib.utils import source
 from rest_framework import serializers
 from news.models import Category, Post, Video
 
@@ -26,7 +27,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class BaseContentItemSerializer(serializers.ModelSerializer):
     datePublished = serializers.SerializerMethodField()
-    titlePicture = serializers.SerializerMethodField()
+    titlePicture = serializers.URLField(source="title_picture")
     category = CategorySerializer()
     ytCode = serializers.SerializerMethodField()
 
@@ -37,9 +38,6 @@ class BaseContentItemSerializer(serializers.ModelSerializer):
         if obj.published_at:
             return obj.published_at.isoformat()
         return None
-
-    def get_titlePicture(self, obj):
-        return obj.title_picture_url or ""
 
     def get_ytCode(self, obj):
         if isinstance(obj, Video):
