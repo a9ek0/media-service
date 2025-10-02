@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
 
-    'django_editorjs2',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',

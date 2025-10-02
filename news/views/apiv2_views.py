@@ -6,20 +6,12 @@ from drf_spectacular.types import OpenApiTypes
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 from django.utils.translation import gettext_lazy as _
 
 from news.models import Category, Post, Video
 from news.serializers.apiv2_serializers import PostSerializer, NewsItemSerializer, CategorySerializer, \
     NewsFeedQueryParamsSerializer, NewsFeedExcludedRequestSerializer
-
-
-class NewsFeedPagination(PageNumberPagination):
-    page_size = 20
-    page_size_query_param = 'pageSize'
-    page_query_param = 'pageNumber'
-    max_page_size = 100
 
 
 class NewsFeedAPIView(APIView):
