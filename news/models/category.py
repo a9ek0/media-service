@@ -35,7 +35,7 @@ class Category(models.Model):
         blank=True,
         related_name="children",
         verbose_name=_("Родительская категория"),
-        help_text = _("Оставьте пустым для корневой категории")
+        help_text=_("Оставьте пустым для корневой категории")
     )
 
     class Meta:

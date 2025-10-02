@@ -149,7 +149,6 @@ DJANGO_EDITORJS2_CONFIG = {
     }
 }
 
-
 # REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
@@ -179,8 +178,6 @@ DATABASES = {
     }
 }
 
-
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -197,7 +194,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 LANGUAGE_CODE = 'ru-ru'
 
@@ -206,7 +202,6 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'

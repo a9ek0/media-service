@@ -17,6 +17,7 @@ class SubCategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name']
 
+
 class CategorySerializer(serializers.ModelSerializer):
     type = serializers.CharField(source='get_type_display')
     subCategories = SubCategorySerializer(source='children', many=True, read_only=True)
@@ -24,6 +25,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name', 'type', 'subCategories']
+
 
 class BaseContentItemSerializer(serializers.ModelSerializer):
     datePublished = serializers.SerializerMethodField()
@@ -44,6 +46,7 @@ class BaseContentItemSerializer(serializers.ModelSerializer):
             return obj.yt_code
         return None
 
+
 class PostSerializer(BaseContentItemSerializer):
     class Meta(BaseContentItemSerializer.Meta):
         model = Post
@@ -53,6 +56,7 @@ class VideoSerializer(BaseContentItemSerializer):
     class Meta(BaseContentItemSerializer.Meta):
         model = Video
 
+
 class NewsItemSerializer(serializers.Serializer):
     def to_representation(self, instance):
         if isinstance(instance, Post):
@@ -61,11 +65,13 @@ class NewsItemSerializer(serializers.Serializer):
             return VideoSerializer(instance).data
         return None
 
+
 class NewsFeedQueryParamsSerializer(serializers.Serializer):
     pageSize = serializers.IntegerField(default=20, min_value=1, max_value=100)
     pageNumber = serializers.IntegerField(default=1)
     categoryId = serializers.IntegerField(required=False)
     allNews = serializers.BooleanField(default=False)
+
 
 class NewsFeedExcludedRequestSerializer(serializers.Serializer):
     excluded = serializers.ListField(

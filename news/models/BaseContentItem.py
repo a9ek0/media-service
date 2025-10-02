@@ -15,7 +15,7 @@ class BaseContentItem(models.Model):
     title = models.CharField(
         max_length=200,
         verbose_name=_("Заголовок"),
-        help_text = _("Краткий заголовок, до 200 символов")
+        help_text=_("Краткий заголовок, до 200 символов")
     )
     lead = models.TextField(
         blank=True,

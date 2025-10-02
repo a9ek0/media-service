@@ -18,10 +18,12 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ["id", "name", "slug", "parent"]
 
+
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ["id", "name", "slug"]
+
 
 class PostSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -77,6 +79,7 @@ class PostSerializer(serializers.ModelSerializer):
             "updated_at",
             "slug"
         ]
+
 
 class VideoSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)

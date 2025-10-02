@@ -26,6 +26,7 @@ class BaseViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = "slug"
 
+
 class CategoryViewSet(BaseViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -34,6 +35,7 @@ class CategoryViewSet(BaseViewSet):
     ordering_fields = ["name"]
     ordering = ["name"]
 
+
 class TagViewSet(BaseViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
@@ -41,6 +43,7 @@ class TagViewSet(BaseViewSet):
     search_fields = ["name", "slug"]
     ordering_fields = ["name"]
     ordering = ["name"]
+
 
 class PostFilter(django_filters.FilterSet):
     class Meta:
@@ -53,6 +56,7 @@ class PostFilter(django_filters.FilterSet):
             "created_at": ["date", "date__gte", "date__lte"],
             "published_at": ["date", "date__gte", "date__lte"]
         }
+
 
 class PostViewSet(BaseViewSet):
     queryset = Post.objects.select_related("category", "author").prefetch_related("tags")
@@ -83,6 +87,7 @@ class PostViewSet(BaseViewSet):
     def perform_update(self, serializer):
         serializer.save(author=self.request.user)
 
+
 class VideoFilter(django_filters.FilterSet):
     class Meta:
         model = Video
@@ -92,6 +97,7 @@ class VideoFilter(django_filters.FilterSet):
             "created_at": ["date", "date__gte", "date__lte"],
             "published_at": ["date", "date__gte", "date__lte"]
         }
+
 
 class VideoViewSet(BaseViewSet):
     queryset = Video.objects.select_related("category", "author").prefetch_related("tags")

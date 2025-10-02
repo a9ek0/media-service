@@ -21,6 +21,7 @@ class NewsFeedPagination(PageNumberPagination):
     page_query_param = 'pageNumber'
     max_page_size = 100
 
+
 class NewsFeedAPIView(APIView):
     serializer_class = NewsItemSerializer
 
@@ -132,6 +133,7 @@ class NewsFeedAPIView(APIView):
             'meta': {'totalCount': total_count}
         })
 
+
 class NewsCategoriesAPIView(APIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
@@ -148,6 +150,7 @@ class NewsCategoriesAPIView(APIView):
         return Response({
             'data': serializer.data
         })
+
 
 @extend_schema(
     responses={

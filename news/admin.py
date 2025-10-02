@@ -5,7 +5,7 @@ from unfold.admin import ModelAdmin
 
 from datetime import timezone
 
-from .models import Category, Post,  Tag, Video
+from .models import Category, Post, Tag, Video
 
 
 @admin.register(Category)
@@ -20,6 +20,7 @@ class CategoryAdmin(ModelAdmin):
     @admin.display(description=_("Количество подкатегорий"))
     def children_count(self, obj):
         return obj.children.count()
+
 
 @admin.register(Tag)
 class TagAdmin(ModelAdmin):
@@ -37,6 +38,7 @@ class TagAdmin(ModelAdmin):
             if hasattr(obj, rel_name):
                 total += getattr(obj, rel_name).count()
         return total
+
 
 @admin.register(Post)
 class PostAdmin(ModelAdmin):
@@ -82,9 +84,12 @@ class PostAdmin(ModelAdmin):
         updated = queryset.update(status="draft")
         self.message_user(request, _("%(count)d posts marked as draft.") % {"count": updated})
 
+
 @admin.register(Video)
 class VideoAdmin(ModelAdmin):
-    list_display = ("title", "lead", "author", "youtube_url", "rutube_url", "vkvideo_url", "views", "created_at", "updated_at", "thumbnail_preview")
+    list_display = (
+    "title", "lead", "author", "youtube_url", "rutube_url", "vkvideo_url", "views", "created_at", "updated_at",
+    "thumbnail_preview")
     list_filter = ("status", "created_at", "updated_at", "category", "author")
     search_fields = ("title", "author__username")
     autocomplete_fields = ("category", "tags", "author")
