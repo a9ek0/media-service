@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from news.models import Post
 
+
 class Command(BaseCommand):
     help = "Convert body text to body_json if empty"
 

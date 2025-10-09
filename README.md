@@ -1,78 +1,100 @@
 # Media Service
 
-Севрис для управления медиа-контентом с использованием Django и Django REST Framework.
+Сервис для управления новостями и видео-контентом с использованием Django и Django REST Framework.
 
 ## Возможности
 
-* CRUD для постов, категорий, тегов
-* Редактор текста через EditorJS
-* Загрузка и хранение медиафайлов
+* Единая лента новостей и видео
+* Иерархические категории контента
+* Публикация и планирование контента
+* API v2 для мобильных приложений
+* Автоматическое получение метаданных видео (YouTube, RuTube)
+* Админ-панель на основе Django Unfold
 * Swagger документация
-* Тесты через pytest
 
 ## Технологии
 
 * Django, Django REST Framework
-* PostgreSQL
-* EditorJS (через django-editorjs2)
+* PostgreSQL (psycopg[c])
+* Django Unfold (админ-панель)
 * Swagger (drf-spectacular)
-* pytest
+* Markdown для контента
+* Django TestCase
 
-## Установка
+## Быстрый старт
+
+### Предварительные требования
+
+* Python 3.10+
+* PostgreSQL 13+
+* uv (менеджер зависимостей)
+
+### Установка и запуск
 
 1. Клонировать репозиторий:
-
    ```bash
-   git clone https://github.com/a9ek0/media-service.git
+   git clone https://github.com/a9ek0/media-service
    cd media-service
    ```
 
-2. Создать виртуальное окружение:
-
+2. Создать виртуальное окружение и установить зависимости:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
+   uv venv
+   uv sync
    ```
 
-3. Установить зависимости:
-
+3. Создать базу данных PostgreSQL и настроить переменные окружения:
    ```bash
-   pip install -r requirements.txt
+   cp .env.example .env
+   # Отредактировать .env - указать DATABASE_URL и другие настройки
    ```
 
-4. Настроить `.env` файл:
-
-   ```env
-   SECRET_KEY=секретный-ключ
-   DEBUG=True
-   POSTGRES_DB=media_service
-   POSTGRES_USER=postgres
-   POSTGRES_PASSWORD=пароль
-   POSTGRES_HOST=localhost
-   POSTGRES_PORT=5432
-   ```
-
-5. Выполнить миграции и создать суперпользователя:
-
+4. Выполнить миграции:
    ```bash
-   python manage.py migrate
-   python manage.py createsuperuser
+   ./manage.py migrate
    ```
 
-6. Запустить сервер:
-
+5. Создать суперпользователя:
    ```bash
-   python manage.py runserver
+   ./manage.py createsuperuser
    ```
 
-## API
+6. Запустить сервер разработки:
+   ```bash
+   ./manage.py runserver
+   ```
 
-* Swagger UI: `http://localhost:8000/api/schema/swagger-ui/`
-* Эндпоинты: `/api/posts/`, `/api/categories/`, `/api/tags/`, `/api/media/`
+## API v2
 
-## Тесты
+### Эндпоинты
+
+* `GET /news/feed` - Лента новостей и видео
+* `POST /news/feed` - Лента с исключением элементов
+* `GET /news/categories` - Дерево категорий
+* `GET /news/{id}` - HTML представление контента
+
+### Документация API
+
+* Swagger UI: `http://localhost:8000/api/docs/`
+
+## Тестирование
 
 ```bash
-pytest
+# Запуск всех тестов
+./manage.py test
+
+# Запуск тестов с покрытием
+./manage.py test --verbosity=2
 ```
 
+## Разработка
+
+### Форматирование кода
+```bash
+black .
+```
+
+### Проверка типов
+```bash
+mypy .
+```

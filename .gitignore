@@ -81,6 +81,11 @@ logs/
 .DS_Store
 Thumbs.db
 
-# Requirments
-requirements.txt
+# Black
+.black_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 

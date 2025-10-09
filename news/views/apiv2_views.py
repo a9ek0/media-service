@@ -1,129 +1,98 @@
 import markdown
 
-from django.http import HttpResponse
-from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiExample
-from drf_spectacular.types import OpenApiTypes
+from django.http import HttpResponse, HttpResponseNotFound
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.utils.translation import gettext_lazy as _
+from rest_framework.decorators import api_view
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 
-from news.models import Category, Post, Video
-from news.serializers.apiv2_serializers import PostSerializer, NewsItemSerializer, CategorySerializer, \
-    NewsFeedQueryParamsSerializer, NewsFeedExcludedRequestSerializer
+from news.models import Category, ContentItem
+from news.serializers.apiv2_serializers import (
+    CategorySerializer,
+    ContentItemSerializer,
+    NewsFeedQueryParamsSerializer,
+    NewsFeedExcludedRequestSerializer,
+)
+from news.utils import get_category_and_descendants_ids
 
 
 class NewsFeedAPIView(APIView):
-    serializer_class = NewsItemSerializer
+    serializer_class = ContentItemSerializer
 
     @extend_schema(
         parameters=[NewsFeedQueryParamsSerializer],
-        responses={200: PostSerializer(many=True), },
+        responses={200: ContentItemSerializer(many=True)},
         description="Получить ленту новостей и видео.",
         summary="Лента новостей",
-        tags=["Новости"]
+        tags=["Новости"],
     )
     def get(self, request):
-        param_serializer = NewsFeedQueryParamsSerializer(data=request.GET)
-        param_serializer.is_valid(raise_exception=True)
-        params = param_serializer.validated_data
+        params_serializer = NewsFeedQueryParamsSerializer(data=request.GET)
+        params_serializer.is_valid(raise_exception=True)
+        params = params_serializer.validated_data
 
-        page_size = params['pageSize']
-        page_number = params['pageNumber']
-        category_id = params.get('categoryId')
-        all_news = params['allNews']
+        page_size = params["pageSize"]
+        page_number = params["pageNumber"]
+        category_id = params.get("categoryId")
+        all_news = params["allNews"]
 
-        articles_qs = Post.objects.filter(status='published') \
-            .only('id', 'title', 'lead', 'published_at', 'created_at', 'title_picture', 'category_id') \
-            .select_related('category') \
-            .prefetch_related('category__children')
-
-        videos_qs = Video.objects.filter(status='published') \
-            .only('id', 'title', 'lead', 'published_at', 'created_at', 'title_picture', 'category_id') \
-            .select_related('category') \
-            .prefetch_related('category__children')
-
-        if category_id is not None:
-            articles_qs = articles_qs.filter(category_id=category_id)
-            videos_qs = videos_qs.filter(category_id=category_id)
-
-        if all_news:
-            articles_list = list(articles_qs.order_by('-published_at', '-updated_at'))
-            videos_list = list(videos_qs.order_by('-published_at', '-updated_at'))
-
-            total_count = len(articles_list) + len(videos_list)
-
-            combined = sorted(
-                articles_list + videos_list,
-                key=lambda x: x.published_at or x.created_at,
-                reverse=True
-            )
-            serializer = NewsItemSerializer(combined, many=True)
-            return Response({
-                'data': serializer.data,
-                'meta': {'totalCount': total_count}
-            })
-
-        total_count = articles_qs.count() + videos_qs.count()
-
-        limit = page_size * page_number
-        articles_slice = list(articles_qs.order_by('-published_at', '-updated_at')[:limit])
-        videos_slice = list(videos_qs.order_by('-published_at', '-updated_at')[:limit])
-
-        combined = sorted(
-            articles_slice + videos_slice,
-            key=lambda x: x.published_at or x.created_at,
-            reverse=True
+        qs = (
+            ContentItem.objects.filter(status=ContentItem.Status.PUBLISHED)
+            .only("id", "title", "lead", "published_at", "created_at", "title_picture", "category_id", "content_type")
+            .select_related("category")
+            .order_by("-published_at", "-updated_at")
         )
 
-        start = (page_number - 1) * page_size
-        page_items = combined[start:start + page_size]
+        total_count = qs.count()
 
-        serializer = NewsItemSerializer(page_items, many=True)
-        return Response({
-            'data': serializer.data,
-            'meta': {'totalCount': total_count}
-        })
+        if not all_news and category_id is not None:
+            category_ids = get_category_and_descendants_ids(category_id)
+            if category_ids:
+                qs = qs.filter(category_id__in=category_ids)
+            else:
+                qs = qs.none()
+
+        if not all_news:
+            offset = (page_number - 1) * page_size
+            qs = qs[offset : offset + page_size]
+
+        serializer = ContentItemSerializer(qs, many=True)
+        return Response({"data": serializer.data, "meta": {"totalCount": total_count}})
 
     @extend_schema(
         request=NewsFeedExcludedRequestSerializer,
-        responses={200: PostSerializer(many=True), },
-        description="Получить полную ленту новостей и видео, исключая элементы с указанными ID.",
+        responses={200: ContentItemSerializer(many=True)},
+        description="Получить ленту новостей и видео, исключая элементы с указанными ID.",
         summary="Лента новостей с исключением по ID",
-        tags=["Новости"]
+        tags=["Новости"],
     )
     def post(self, request):
         input_serializer = NewsFeedExcludedRequestSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
-        excluded_ids = input_serializer.validated_data.get('excluded', [])
+        excluded_ids = input_serializer.validated_data.get("excluded", [])
 
-        articles_qs = Post.objects.filter(status='published') \
-            .exclude(id__in=excluded_ids) \
-            .only('id', 'title', 'lead', 'published_at', 'created_at', 'title_picture', 'category_id') \
-            .select_related('category') \
-            .prefetch_related('category__children')
-
-        videos_qs = Video.objects.filter(status='published') \
-            .exclude(id__in=excluded_ids) \
-            .only('id', 'title', 'lead', 'published_at', 'created_at', 'title_picture', 'category_id') \
-            .select_related('category') \
-            .prefetch_related('category__children')
-
-        articles_list = list(articles_qs)
-        videos_list = list(videos_qs)
-        combined = sorted(
-            articles_list + videos_list,
-            key=lambda x: x.published_at or x.created_at,
-            reverse=True
+        qs = (
+            ContentItem.objects.filter(status=ContentItem.Status.PUBLISHED)
+            .exclude(id__in=excluded_ids)
+            .only(
+                "id",
+                "title",
+                "lead",
+                "published_at",
+                "created_at",
+                "title_picture",
+                "category_id",
+            )
+            .select_related("category")
+            .prefetch_related("category__category_set")
+            .order_by("-published_at", "-updated_at")
         )
 
-        total_count = len(articles_list) + len(videos_list)
-        serializer = NewsItemSerializer(combined, many=True)
-        return Response({
-            'data': serializer.data,
-            'meta': {'totalCount': total_count}
-        })
+        serializer = ContentItemSerializer(qs, many=True)
+        return Response({"data": serializer.data, "meta": {"totalCount": qs.count()}})
 
 
 class NewsCategoriesAPIView(APIView):
@@ -134,66 +103,55 @@ class NewsCategoriesAPIView(APIView):
         responses={200: CategorySerializer(many=True)},
         description="Получить дерево категорий новостей и видео.",
         summary="Список категорий",
-        tags=["Новости"]
+        tags=["Новости"],
     )
     def get(self, request):
-        categories = Category.objects.all().prefetch_related('children')
+        categories = Category.objects.filter(parent__isnull=True).prefetch_related(
+            "category_set", "category_set__category_set", "category_set__category_set__category_set"
+        )
         serializer = CategorySerializer(categories, many=True)
-        return Response({
-            'data': serializer.data
-        })
+        return Response({"data": serializer.data})
 
 
 @extend_schema(
     responses={
         200: OpenApiResponse(
-            description="HTML-представление указанной новости",
+            description="HTML-представление указанной новости или видео",
             response=OpenApiTypes.STR,
             examples=[
                 OpenApiExample(
-                    'Пример HTML',
-                    value='<h1>Заголовок</h1><p>Текст новости...</p>',
-                    media_type='text/html'
+                    "Пример HTML", value="<h1>Заголовок</h1><p>Текст контента...</p>", media_type="text/html"
                 )
-            ]
+            ],
         ),
         404: OpenApiResponse(
-            description="Новость/видео не найдено",
+            description="Контент не найден",
             response=OpenApiTypes.OBJECT,
             examples=[
                 OpenApiExample(
-                    'Пример ошибки',
-                    value={
-                        'errors': [{
-                            'code': 'string',
-                            'title': 'string',
-                            'details': 'string'
-                        }]
-                    }
+                    "Пример ошибки", value={"errors": [{"code": "not_found", "details": "Content not found"}]}
                 )
-            ]
-        )
+            ],
+        ),
     },
-    description="Возвращает HTML-представление конкретной новости или видео.",
-    summary="HTML-представление указанной новости",
+    description="Возвращает HTML-представление контентного элемента (новости или видео).",
+    summary="HTML-представление контента",
     tags=["Новости"],
-    operation_id="news_detail_html"
 )
-@api_view(['GET'])
+@api_view(["GET"])
 def news_detail_html(request, newsItemId):
     try:
-        content_item = Post.objects.get(id=newsItemId, status='published')
-        if content_item.body:
-            html_content = markdown.markdown(content_item.body)
-        else:
-            html_content = None
-    except Post.DoesNotExist:
-        return Response({
-            'errors': [{
-                'code': 'not_found',
-                'title': 'Object not found',
-                'details': f'Article with ID {newsItemId} does not exist'
-            }]
-        }, status=status.HTTP_404_NOT_FOUND)
+        content_item = ContentItem.objects.get(id=newsItemId, status=ContentItem.Status.PUBLISHED)
+    except ContentItem.DoesNotExist:
+        # Json в соответствии со спецификацией
+        return Response(
+            {"errors": [{"code": "not_found", "title": "Not Found", "details": "Content not found"}]},
+            status=status.HTTP_404_NOT_FOUND,
+            content_type="application/json",
+        )
 
-    return HttpResponse(html_content or "<p>" + _("Контент отсутствует") + "</p>", content_type='text/html')
+    html_content = (
+        markdown.markdown(content_item.body or "") if content_item.body else "<p>" + _("Контент отсутствует") + "</p>"
+    )
+
+    return HttpResponse(html_content, content_type="text/html; charset=utf-8")

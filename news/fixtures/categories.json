@@ -6,8 +6,7 @@
       "type": "article",
       "name": "Новости",
       "slug": "novosti",
-      "parent": null,
-      "description": "Категория для новостей"
+      "parent": null
     }
   },
   {
@@ -17,8 +16,7 @@
       "type": "article",
       "name": "Технологии",
       "slug": "tekhnologii",
-      "parent": null,
-      "description": "Новости технологий и IT"
+      "parent": null
     }
   },
   {
@@ -28,8 +26,47 @@
       "type": "video",
       "name": "Обзоры",
       "slug": "obzory",
-      "parent": null,
-      "description": "Видео обзоры"
+      "parent": null
+    }
+  },
+    {
+    "model": "news.category",
+    "pk": 4,
+    "fields": {
+      "type": "article",
+      "name": "Подзаголовок1",
+      "slug": "podzagolovok1",
+      "parent": 3
+    }
+  },
+    {
+    "model": "news.category",
+    "pk": 5,
+    "fields": {
+      "type": "article",
+      "name": "Подзаголовок1-1",
+      "slug": "podzagolovok1-1",
+      "parent": 3
+    }
+  },
+    {
+    "model": "news.category",
+    "pk": 6,
+    "fields": {
+      "type": "article",
+      "name": "Подзаголовок2",
+      "slug": "podzagolovok2",
+      "parent": 4
+    }
+  },
+      {
+    "model": "news.category",
+    "pk": 7,
+    "fields": {
+      "type": "article",
+      "name": "Подзаголовок3",
+      "slug": "podzagolovok3",
+      "parent": 6
     }
   }
 ]

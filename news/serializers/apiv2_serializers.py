@@ -1,68 +1,71 @@
-from numpy.lib.utils import source
 from rest_framework import serializers
-from news.models import Category, Post, Video
+from news.models import Category, ContentItem
 
 __all__ = [
     "CategorySerializer",
-    "PostSerializer",
-    "VideoSerializer",
-    "NewsItemSerializer",
+    "ContentItemSerializer",
     "NewsFeedQueryParamsSerializer",
-    "NewsFeedExcludedRequestSerializer"
+    "NewsFeedExcludedRequestSerializer",
 ]
 
 
-class SubCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['id', 'name']
-
-
 class CategorySerializer(serializers.ModelSerializer):
-    type = serializers.CharField(source='get_type_display')
-    subCategories = SubCategorySerializer(source='children', many=True, read_only=True)
+    type = serializers.SerializerMethodField()
+    subCategories = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'type', 'subCategories']
+        fields = ["id", "name", "type", "subCategories"]
+
+    def get_type(self, obj):
+        if obj.type == "V":
+            return "video"
+        elif obj.type == "A":
+            return "article"
+        return obj.type
+
+    def get_subCategories(self, obj):
+        children = obj.category_set.all()
+        return SubCategoryInListSerializer(children, many=True, context=self.context).data
 
 
-class BaseContentItemSerializer(serializers.ModelSerializer):
+class SubCategoryInListSerializer(serializers.ModelSerializer):
+    subCategories = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+        fields = ["id", "name", "subCategories"]
+
+    def get_subCategories(self, obj):
+        children = obj.category_set.all()
+        return SubCategoryInListSerializer(children, many=True, context=self.context).data
+
+
+class ContentItemSerializer(serializers.ModelSerializer):
     datePublished = serializers.SerializerMethodField()
-    titlePicture = serializers.URLField(source="title_picture")
+    titlePicture = serializers.SerializerMethodField()
     category = CategorySerializer()
     ytCode = serializers.SerializerMethodField()
 
     class Meta:
-        fields = ['id', 'datePublished', 'title', 'lead', 'titlePicture', 'ytCode', 'category']
+        model = ContentItem
+        fields = ["id", "datePublished", "title", "lead", "titlePicture", "ytCode", "category"]
 
     def get_datePublished(self, obj):
         if obj.published_at:
             return obj.published_at.isoformat()
         return None
 
+    def get_titlePicture(self, obj):
+        if hasattr(obj, "title_picture_url") and callable(obj.title_picture_url):
+            url = obj.title_picture_url()
+        else:
+            url = None
+        return url or obj.title_picture
+
     def get_ytCode(self, obj):
-        if isinstance(obj, Video):
-            return obj.yt_code
-        return None
-
-
-class PostSerializer(BaseContentItemSerializer):
-    class Meta(BaseContentItemSerializer.Meta):
-        model = Post
-
-
-class VideoSerializer(BaseContentItemSerializer):
-    class Meta(BaseContentItemSerializer.Meta):
-        model = Video
-
-
-class NewsItemSerializer(serializers.Serializer):
-    def to_representation(self, instance):
-        if isinstance(instance, Post):
-            return PostSerializer(instance).data
-        elif isinstance(instance, Video):
-            return VideoSerializer(instance).data
+        if obj.content_type == ContentItem.ContentType.VIDEO:
+            return obj.youtube_id
         return None
 
 
@@ -78,5 +81,5 @@ class NewsFeedExcludedRequestSerializer(serializers.Serializer):
         child=serializers.IntegerField(min_value=1),
         required=False,
         default=[],
-        help_text="Список ID новостей/видео, которые нужно исключить из выдачи"
+        help_text="Список ID новостей/видео, которые нужно исключить из выдачи",
     )
