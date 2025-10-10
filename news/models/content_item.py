@@ -11,6 +11,11 @@ from django.utils.translation import gettext_lazy as _
 
 from requests.exceptions import RequestException, Timeout
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from news.models import Tag
+
 __all__ = ["ContentItem"]
 
 logger = logging.getLogger(__name__)
