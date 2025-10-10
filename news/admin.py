@@ -1,15 +1,15 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
-from unfold.admin import ModelAdmin
 
 from django.utils import timezone
 
 from .models import Category, Tag, ContentItem
+from core.admin import BaseAdmin
 
 
 @admin.register(Category)
-class CategoryAdmin(ModelAdmin):
+class CategoryAdmin(BaseAdmin):
     list_display = ("name", "slug", "parent", "children_count")
     list_filter = ("parent",)
     search_fields = ("name", "slug")
@@ -23,7 +23,7 @@ class CategoryAdmin(ModelAdmin):
 
 
 @admin.register(Tag)
-class TagAdmin(ModelAdmin):
+class TagAdmin(BaseAdmin):
     list_display = ("name", "slug", "contents_count")
     search_fields = ("name", "slug")
     prepopulated_fields = {"slug": ("name",)}
@@ -41,7 +41,7 @@ class TagAdmin(ModelAdmin):
 
 
 @admin.register(ContentItem)
-class ContentItemAdmin(ModelAdmin):
+class ContentItemAdmin(BaseAdmin):
     list_display = (
         "title",
         "slug",

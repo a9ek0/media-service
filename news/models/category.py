@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.models import BaseModel
+
 __all__ = ["Category"]
 
 
-class Category(models.Model):
+class Category(BaseModel):
     """Категория для статьи/видео"""
 
     class CategoryType(models.TextChoices):

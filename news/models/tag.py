@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.models import BaseModel
+
 __all__ = ["Tag"]
 
 
-class Tag(models.Model):
+class Tag(BaseModel):
     """Тег для статьи/видео"""
 
     name = models.CharField(unique=True, verbose_name=_("Название"), help_text=_("Пример: Новости, ПДД"))

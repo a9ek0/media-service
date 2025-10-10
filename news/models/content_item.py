@@ -8,20 +8,16 @@ from django.db import models
 from django.db.models.functions import Now
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
 from requests.exceptions import RequestException, Timeout
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from news.models import Tag
+from core.models import BaseModel
 
 __all__ = ["ContentItem"]
 
 logger = logging.getLogger(__name__)
 
 
-class ContentItem(models.Model):
+class ContentItem(BaseModel):
 
     class Status(models.TextChoices):
         DRAFT = "D", _("Черновик")
