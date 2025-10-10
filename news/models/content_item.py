@@ -135,10 +135,9 @@ class ContentItem(BaseModel):
 
     @classmethod
     def publish_scheduled(cls):
-        updated = cls.objects.filter(
+        return cls.objects.filter(
             status=cls.Status.DRAFT, scheduled_at__isnull=False, scheduled_at__lte=timezone.now()
         ).update(status=cls.Status.PUBLISHED, published_at=timezone.now())
-        return updated
 
     @property
     def is_published(self):
