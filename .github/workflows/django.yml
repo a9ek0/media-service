@@ -44,28 +44,28 @@ jobs:
       - name: Install dependencies with uv
         run: |
           uv venv
-          uv sync --all-extras
+          uv sync --all-groups
 
       - name: Setup environment variables
         run: |
           echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/test_db" >> $GITHUB_ENV
           echo "SECRET_KEY=test-secret-key-for-ci-$(openssl rand -hex 32)" >> $GITHUB_ENV
           echo "DEBUG=False" >> $GITHUB_ENV
+          echo "AWS_S3_CUSTOM_DOMAIN=" >> $GITHUB_ENV
+          echo "AWS_STORAGE_BUCKET_NAME=" >> $GITHUB_ENV
+          echo "YOUTUBE_API_KEY=" >> $GITHUB_ENV
 
       - name: Run migrations
         run: |
-          source .venv/bin/activate
-          python manage.py migrate
+          .venv/bin/python manage.py migrate
 
       - name: Run Django tests
         run: |
-          source .venv/bin/activate
-          python manage.py test
+          .venv/bin/python manage.py test --verbosity=2
 
       - name: Run Django check
         run: |
-          source .venv/bin/activate
-          python manage.py check
+          .venv/bin/python manage.py check
 
   lint:
     runs-on: ubuntu-latest
@@ -85,14 +85,19 @@ jobs:
       - name: Install dependencies with uv
         run: |
           uv venv
-          uv sync
+          uv sync --all-groups
+
+      - name: Setup minimal environment for linting
+        run: |
+          echo "SECRET_KEY=test-key" >> $GITHUB_ENV
+          echo "DATABASE_URL=sqlite:///:memory:" >> $GITHUB_ENV
+          echo "AWS_S3_CUSTOM_DOMAIN=" >> $GITHUB_ENV
+          echo "AWS_STORAGE_BUCKET_NAME=" >> $GITHUB_ENV
 
       - name: Run black code formatting check
         run: |
-          source .venv/bin/activate
-          black --check .
+          .venv/bin/python -m black --check .
 
       - name: Run mypy type checking
         run: |
-          source .venv/bin/activate
-          mypy .
+          .venv/bin/python -m mypy .
