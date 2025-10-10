@@ -17,7 +17,7 @@ class Command(BaseCommand):
         parser.add_argument("--videos", type=int, default=5000, help="Number of videos to create")
 
     def handle(self, *args, **options):
-        fake = Faker("ru_RU")  # Лучше использовать русскую локаль для реалистичности
+        fake = Faker("ru_RU")
         categories = list(Category.objects.all())
         if not categories:
             self.stdout.write(self.style.WARNING("Нет категорий!"))

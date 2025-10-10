@@ -92,8 +92,8 @@ class ContentItem(BaseModel):
         verbose_name_plural = _("Элементы контента")
         ordering = ["-published_at", "-updated_at"]
         indexes = [
-            models.Index(fields=["published_at"]),
-            models.Index(fields=["category", "-published_at"]),
+            models.Index(fields=["status", "-published_at"]),
+            models.Index(fields=["category", "status", "-published_at"]),
         ]
 
     def save(self, *args, **kwargs):
