@@ -44,7 +44,7 @@ jobs:
       - name: Install dependencies with uv
         run: |
           uv venv
-          uv sync --all-groups
+          uv sync --group dev
 
       - name: Setup environment variables
         run: |
@@ -85,7 +85,7 @@ jobs:
       - name: Install dependencies with uv
         run: |
           uv venv
-          uv sync --all-groups
+          uv sync --group dev
 
       - name: Setup minimal environment for linting
         run: |
